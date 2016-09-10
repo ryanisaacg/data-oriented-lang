@@ -34,6 +34,8 @@ expression:
 	call
 	| name
 	| number
+	| LPAREN expression RPAREN {
+		$<nval>$ = $<nval>2; }
 	| expression PLUS expression {
 		node *expr = malloc(sizeof(node));
 		expr->type = OP_ADD;
