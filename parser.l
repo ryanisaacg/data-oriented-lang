@@ -3,7 +3,7 @@
 	#include "yacc.tab.h"
 %}
 %%
-[A-Za-z0-9_]+ { yylval.sval = yytext; return WORD;}
+[A-Za-z_]+[A-Za-z0-9_]* { yylval.sval = yytext; return WORD;}
 [ \t] {}
 
 %%

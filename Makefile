@@ -3,11 +3,14 @@ L_FLAGS=
 run: build/parser.out
 	build/./parser.out
 
-build/parser.out: build/yacc.o build/lex.o
-	gcc build/yacc.o build/lex.o -o build/parser.out
+build/parser.out: build/yacc.o build/lex.o build/expression.o
+	gcc build/yacc.o build/lex.o build/expression.o -o build/parser.out
+
+build/expression.o: expression.c expression.h
+	gcc $(C_FLAGS) expression.c -o build/expression.o
 
 build/yacc.o: build/yacc.tab.c
-	gcc -Wno-implicit-function-declaration build/yacc.tab.c -c -o build/yacc.o
+	gcc -I. -Wno-implicit-function-declaration build/yacc.tab.c -c -o build/yacc.o
 
 build/lex.o: build/yacc.tab.c build/lex.c
 	gcc build/lex.c -c -o build/lex.o
