@@ -20,16 +20,14 @@ typedef struct { node *left, *right; } binarynode;
 typedef struct { node *head, *body; } controlnode;
 typedef struct { node *function, **params; int num_params; } callnode;
 typedef struct { node *body; } rootnode;
-typedef struct { char *str; } stringnode;
-typedef struct { int value; } intnode;
 
 typedef union node_data {
 	controlnode control;
 	binarynode binary;
 	callnode call;
 	rootnode root;
-	stringnode string;
-	intnode integer;
+	char *string;
+	int integer;
 } node_data;
 
 struct node {

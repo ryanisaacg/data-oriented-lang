@@ -68,13 +68,13 @@ name:
 	WORD { 
 		node *expr = malloc(sizeof(node));
 		expr->type = NAME;
-		expr->data.string.str = strdup($1);
+		expr->data.string = strdup($1);
 		$<nval>$ = expr; }
 number:
 	INT {
 		node *expr = malloc(sizeof(node));
 		expr->type = NUM;
-		expr->data.integer.value = $1;
+		expr->data.integer = $1;
 		$<nval>$ = expr; }
 %%
 
