@@ -30,3 +30,5 @@ struct node {
 	node_data data;
 	node_type type;
 };
+
+node *new_binary_node(node_type type, node *left, node *right);

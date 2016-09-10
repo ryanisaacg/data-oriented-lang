@@ -37,16 +37,10 @@ expression:
 	| LPAREN expression RPAREN {
 		$<nval>$ = $<nval>2; }
 	| expression PLUS expression {
-		node *expr = malloc(sizeof(node));
-		expr->type = OP_ADD;
-		expr->data.binary[0] = $<nval>1;
-		expr->data.binary[1] = $<nval>3;
+		node *expr = new_binary_node(OP_ADD, $<nval>1, $<nval>3);
 		$<nval>$ = expr; }
 	| expression MINUS expression {
-		node *expr = malloc(sizeof(node));
-		expr->type = OP_SUB;
-		expr->data.binary[0] = $<nval>1;
-		expr->data.binary[1] = $<nval>3;
+		node *expr = new_binary_node(OP_SUB, $<nval>1, $<nval>3);
 		$<nval>$ = expr; }
 call:
 	expression LPAREN RPAREN {
