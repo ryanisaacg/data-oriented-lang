@@ -27,6 +27,7 @@
 %%
 root:
 	statement { print_expression($<nval>1); }
+	| root statement { print_expression($<nval>2); }
 statement:
 	expression LINE_END
 expression:
