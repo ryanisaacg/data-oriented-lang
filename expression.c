@@ -8,23 +8,29 @@ void execute(node *root) {
 	case ROOT:
 		execute(root->data.root.body);
 		break;
-	case FUNC_CALL:
-		char *name = root->call.function->string.str;
-		int param_count = root->call.num_params;
+	case FUNC_CALL: {
+		char *name = root->data.call.function->data.string.str;
+		int param_count = root->data.call.num_params;
 		if(strcmp(name, "print") == 0) {
 			for(int i = 0; i < param_count; i++) {
-				node *param = root->call.params[i];
+				node *param = root->data.call.params[i];
 				switch(param->type) {
 				case STRING:
-					printf("%s", param->string.str);
+					printf("%s", param->data.string.str);
 					break;
 				case NUM:
-					printf("%d", param->integer.value);
+					printf("%d", param->data.integer.value);
+					break;
+				default:
+					fprintf(stderr, "Not currently implemented");
 					break;
 				}
 			}
 			printf("\n");
 		}
+		} break;
+	default:
+		fprintf(stderr, "Not currently implemented");
 		break;
 	}
 }

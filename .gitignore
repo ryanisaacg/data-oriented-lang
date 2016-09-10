@@ -1,1 +1,3 @@
 build/
+lex.c
+yacc.tab.c

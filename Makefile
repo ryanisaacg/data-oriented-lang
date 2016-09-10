@@ -3,23 +3,27 @@ L_FLAGS=
 run: build/parser.out
 	build/./parser.out
 
-build/parser.out: build/yacc.o build/lex.o build/expression.o
+clean:
+	rm -r build
+	rm lex.c yacc.tab.c
+
+build/parser.out: build build/yacc.o build/lex.o build/expression.o
 	gcc build/yacc.o build/lex.o build/expression.o -o build/parser.out
 
 build/expression.o: expression.c expression.h
-	gcc $(C_FLAGS) expression.c -o build/expression.o
+	gcc $(C_FLAGS) expression.c -c -o build/expression.o
 
-build/yacc.o: build/yacc.tab.c
-	gcc -I. -Wno-implicit-function-declaration build/yacc.tab.c -c -o build/yacc.o
+build/yacc.o: yacc.tab.c
+	gcc -I. -Wno-implicit-function-declaration yacc.tab.c -c -o build/yacc.o
 
-build/lex.o: build/yacc.tab.c build/lex.c
-	gcc build/lex.c -c -o build/lex.o
+build/lex.o: yacc.tab.c lex.c
+	gcc lex.c -c -o build/lex.o
 
-build/lex.c: build build/yacc.tab.h parser.l
-	flex -obuild/lex.c parser.l
+lex.c: yacc.tab.h parser.l
+	flex -olex.c parser.l
 	
-build/yacc.tab.c: build parser.y
-	bison -d -bbuild/yacc parser.y
+yacc.tab.c: parser.y
+	bison -d -byacc parser.y
 
 build:
 	mkdir build

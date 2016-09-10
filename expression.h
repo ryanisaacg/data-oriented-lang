@@ -1,7 +1,5 @@
 #pragma once
 
-#define DEFSTRUCT(name, ...) struct name; typedef struct name name; struct name { __VA_ARGS__};
-
 struct node;
 typedef struct node node;
 
@@ -18,13 +16,12 @@ typedef enum node_type { OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_EXP,
 	ROOT,
 	STRING, CHAR, NUM,
 	VALUE_TRUE, VALUE_FALSE } node_type;
-
-DEFSTRUCT(binarynode, node *left, *right; );
-DEFSTRUCT(controlnode, node *head, *body;);
-DEFSTRUCT(callnode, node *function, **params; int num_params; );
-DEFSTRUCT(rootnode, node *body);
-DEFSTRUCT(stringnode, char *str);
-DEFSTRUCT(intnode, int value);
+typedef struct { node *left, *right; } binarynode;
+typedef struct { node *head, *body; } controlnode;
+typedef struct { node *function, **params; int num_params; } callnode;
+typedef struct { node *body; } rootnode;
+typedef struct { char *str; } stringnode;
+typedef struct { int value; } intnode;
 
 typedef union node_data {
 	controlnode control;
