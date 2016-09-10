@@ -40,16 +40,14 @@ expression:
 		node *expr = malloc(sizeof(node));
 		expr->type = OP_ADD;
 		expr->data.binary.left = $<nval>1;
-		expr->data.binary.right = $<nval>2;
-		$<nval>$ = expr;
-	}
+		expr->data.binary.right = $<nval>3;
+		$<nval>$ = expr; }
 	| expression MINUS expression {
 		node *expr = malloc(sizeof(node));
 		expr->type = OP_SUB;
 		expr->data.binary.left = $<nval>1;
-		expr->data.binary.right = $<nval>2;
-		$<nval>$ = expr;
-	}
+		expr->data.binary.right = $<nval>3;
+		$<nval>$ = expr; }
 call:
 	expression LPAREN RPAREN {
 		node *expr = malloc(sizeof(node));
