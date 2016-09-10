@@ -164,8 +164,8 @@ static void print_expression_tabbed(node *expr, int tab) {
 	switch(expr->type) {
 	case OP_ADD:
 	case OP_SUB:
-		print_expression_tabbed(expr->data.binary.left, tab + 1);
-		print_expression_tabbed(expr->data.binary.right, tab + 1);
+		print_expression_tabbed(expr->data.binary[0], tab + 1);
+		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;
 	case FUNC_CALL:
 		print_expression_tabbed(expr->data.call.function, tab + 1);
@@ -174,13 +174,13 @@ static void print_expression_tabbed(node *expr, int tab) {
 		}
 		break;
 	case NUM:
-		printf("%d", expr->data.integer.value);
+		printf("%d", expr->data.integer);
 		break;
 	case STRING:
-		printf("%s", expr->data.string.str);
+		printf("%s", expr->data.string);
 		break;
 	case NAME:
-		printf("%s", expr->data.string.str);
+		printf("%s", expr->data.string);
 		break;
 	default:
 		fprintf(stderr, "Unexpected node type");

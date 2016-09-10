@@ -8,7 +8,7 @@ clean:
 	rm lex.c yacc.tab.c
 
 build/parser.out: build build/yacc.o build/lex.o build/expression.o build/printing.o
-	gcc build/yacc.o build/lex.o build/expression.o build/ast_strings.o build/printing.o -o build/parser.out
+	gcc build/yacc.o build/lex.o build/expression.o build/printing.o -o build/parser.out
 
 build/printing.o: printing.h printing.c
 	gcc $(C_FLAGS) printing.c -c -o build/printing.o

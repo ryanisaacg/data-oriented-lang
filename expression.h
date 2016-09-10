@@ -16,16 +16,12 @@ typedef enum node_type { OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_EXP,
 	ROOT,
 	STRING, CHAR, NUM,
 	VALUE_TRUE, VALUE_FALSE } node_type;
-typedef struct { node *left, *right; } binarynode;
-typedef struct { node *head, *body; } controlnode;
 typedef struct { node *function, **params; int num_params; } callnode;
-typedef struct { node *body; } rootnode;
 
 typedef union node_data {
-	controlnode control;
-	binarynode binary;
+	node *unary;
+	node *binary[2];
 	callnode call;
-	rootnode root;
 	char *string;
 	int integer;
 } node_data;
@@ -34,6 +30,3 @@ struct node {
 	node_data data;
 	node_type type;
 };
-
-void execute(node *root);
-node *new_node(node_type type);

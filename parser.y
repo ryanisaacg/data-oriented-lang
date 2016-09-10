@@ -10,7 +10,7 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
-	node r = {.data = {.root= {.body = NULL}}, .type= ROOT};
+	node r = {.data = {.unary = NULL}, .type= ROOT};
 	node *root = &r;
 %}
 
@@ -39,14 +39,14 @@ expression:
 	| expression PLUS expression {
 		node *expr = malloc(sizeof(node));
 		expr->type = OP_ADD;
-		expr->data.binary.left = $<nval>1;
-		expr->data.binary.right = $<nval>3;
+		expr->data.binary[0] = $<nval>1;
+		expr->data.binary[1] = $<nval>3;
 		$<nval>$ = expr; }
 	| expression MINUS expression {
 		node *expr = malloc(sizeof(node));
 		expr->type = OP_SUB;
-		expr->data.binary.left = $<nval>1;
-		expr->data.binary.right = $<nval>3;
+		expr->data.binary[0] = $<nval>1;
+		expr->data.binary[1] = $<nval>3;
 		$<nval>$ = expr; }
 call:
 	expression LPAREN RPAREN {
