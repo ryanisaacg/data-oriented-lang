@@ -9,6 +9,9 @@ static char *statement_to_string(node_type type) {
         case OP_SUB:
         	return "OP_SUB";
         break;
+        case OP_NEGATIVE:
+			return "OP_NEGATIVE";
+		break;
         case OP_MULT:
         	return "OP_MULT";
         break;
@@ -162,6 +165,9 @@ static void print_expression_tabbed(node *expr, int tab) {
 		printf("  ");
 	printf("%s: ", statement_to_string(expr->type));
 	switch(expr->type) {
+	case OP_NEGATIVE:
+		print_expression_tabbed(expr->data.unary, tab + 1);
+		break;
 	case OP_ADD:
 	case OP_SUB:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);

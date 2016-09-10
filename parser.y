@@ -42,6 +42,11 @@ expression:
 	| expression MINUS expression {
 		node *expr = new_binary_node(OP_SUB, $<nval>1, $<nval>3);
 		$<nval>$ = expr; }
+	| MINUS expression {
+		node *expr = malloc(sizeof(node));
+		expr->type = OP_NEGATIVE;
+		expr->data.unary = $<nval>2;
+		$<nval>$ = expr; }
 call:
 	expression LPAREN RPAREN {
 		node *expr = malloc(sizeof(node));
