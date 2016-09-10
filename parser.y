@@ -5,6 +5,7 @@
 }
 
 %{
+	#include "printing.h"
 	#include "yacc.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
@@ -21,19 +22,33 @@
 %token RPAREN
 %token LINE_END
 %token <ival> INT
-
+%token PLUS
+%token MINUS
 %%
 root:
-	statement { printf("root"); execute($<nval>1); }
+	statement { print_expression($<nval>1); }
 statement:
 	expression LINE_END
 expression:
 	call
 	| name
 	| number
+	| expression PLUS expression {
+		node *expr = malloc(sizeof(node));
+		expr->type = OP_ADD;
+		expr->data.binary.left = $<nval>1;
+		expr->data.binary.right = $<nval>2;
+		$<nval>$ = expr;
+	}
+	| expression MINUS expression {
+		node *expr = malloc(sizeof(node));
+		expr->type = OP_SUB;
+		expr->data.binary.left = $<nval>1;
+		expr->data.binary.right = $<nval>2;
+		$<nval>$ = expr;
+	}
 call:
 	expression LPAREN RPAREN {
-		printf("Call");
 		node *expr = malloc(sizeof(node));
 		expr->type = FUNC_CALL;
 		expr->data.call.num_params = 0;
@@ -41,7 +56,6 @@ call:
 		expr->data.call.function = $<nval>1;
 		$<nval>$ = expr; }
 	| expression LPAREN expression RPAREN {
-		printf("Call");
 		node *expr = malloc(sizeof(node));
 		expr->type = FUNC_CALL;
 		expr->data.call.num_params = 1;
@@ -51,14 +65,12 @@ call:
 		$<nval>$ = expr; }
 name:
 	WORD { 
-		printf("Name");
 		node *expr = malloc(sizeof(node));
 		expr->type = NAME;
 		expr->data.string.str = strdup($1);
 		$<nval>$ = expr; }
 number:
 	INT {
-		printf("Num");
 		node *expr = malloc(sizeof(node));
 		expr->type = NUM;
 		expr->data.integer.value = $1;

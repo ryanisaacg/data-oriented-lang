@@ -55,7 +55,9 @@ extern int yydebug;
     LPAREN = 259,
     RPAREN = 260,
     LINE_END = 261,
-    INT = 262
+    INT = 262,
+    PLUS = 263,
+    MINUS = 264
   };
 #endif
 
@@ -64,10 +66,10 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 16 "parser.y" /* yacc.c:1909  */
+#line 17 "parser.y" /* yacc.c:1909  */
  char* sval; node *nval; int ival; 
 
-#line 71 "yacc.tab.h" /* yacc.c:1909  */
+#line 73 "yacc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -38,3 +38,4 @@ struct node {
 };
 
 void execute(node *root);
+node *new_node(node_type type);

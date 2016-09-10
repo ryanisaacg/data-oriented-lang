@@ -10,6 +10,8 @@
 [ \t] {}
 "(" { return LPAREN; }
 ")" { return RPAREN; }
+"+" { return PLUS; }
+"-" { return MINUS; }
 "\n" { return LINE_END; }
 %%
 void yyerror(char *message) {
