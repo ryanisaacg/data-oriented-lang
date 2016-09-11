@@ -36,4 +36,3 @@ node *new_binary_node(node_type type, node *left, node *right);
 node *new_list_node(int initial_size);
 void add_to_list(node *list, node *item);
 node *get_from_list(node *list, int index);
-node 
