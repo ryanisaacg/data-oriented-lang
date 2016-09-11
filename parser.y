@@ -22,11 +22,8 @@
 %token RPAREN
 %token LINE_END
 %token <ival> INT
-%token PLUS
-%token MINUS
-%token TIMES
-%token DIVIDE
-%token MODULO
+%token PLUS MINUS MODULO
+%token TIMES DIVIDE
 %token EXP
 %%
 root:
