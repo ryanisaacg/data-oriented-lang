@@ -30,5 +30,5 @@ void add_to_list(node *list, node *item) {
 }
 
 node *get_from_list(node *list, int index) {
-	return list->data.list.data[index];
+	return &(list->data.list.data[index]);
 }
