@@ -14,7 +14,7 @@
 	node *root = &r;
 %}
 
-%union { char* sval; node *nval; int ival; node_type typeval}
+%union { char* sval; node *nval; int ival; node_type typeval;}
 
 
 %token <sval> WORD
