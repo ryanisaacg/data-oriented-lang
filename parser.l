@@ -20,6 +20,7 @@
 "**" { return EXP; }
 "\n" { line++; return LINE_END; }
 "\r" {}
+"," { return COMMA; }
 %%
 void yyerror(char *message) {
 	fprintf(stderr, "%s at line %d", message, line);

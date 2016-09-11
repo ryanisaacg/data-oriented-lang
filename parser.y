@@ -20,6 +20,7 @@
 %token <sval> WORD
 %token LPAREN
 %token RPAREN
+%token COMMA
 %token LINE_END
 %token <ival> INT
 %token PLUS MINUS MODULO
@@ -27,8 +28,8 @@
 %token EXP
 %%
 root:
-	statement { print_expression($<nval>1); }
-	| root statement { print_expression($<nval>2); }
+	statement { print_expression($<nval>1); $<nval>$ = $<nval>1; }
+	| root statement { print_expression($<nval>2); $<nval>$ = $<nval>1 = $<nval>2;}
 statement:
 	expression LINE_END
 binary_operator:
@@ -55,21 +56,16 @@ expression:
 		expr->type = OP_NEGATIVE;
 		expr->data.unary = $<nval>2;
 		$<nval>$ = expr; }
+param_list:
+	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
+	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
+	| param_list COMMA expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 call:
-	expression LPAREN RPAREN {
+	expression LPAREN param_list RPAREN {
 		node *expr = malloc(sizeof(node));
 		expr->type = FUNC_CALL;
-		expr->data.call.num_params = 0;
-		expr->data.call.params = NULL;
 		expr->data.call.function = $<nval>1;
-		$<nval>$ = expr; }
-	| expression LPAREN expression RPAREN {
-		node *expr = malloc(sizeof(node));
-		expr->type = FUNC_CALL;
-		expr->data.call.num_params = 1;
-		expr->data.call.params = malloc(sizeof(node*));
-		expr->data.call.params[0] = $<nval>3;
-		expr->data.call.function = $<nval>1;
+		expr->data.call.parameters = $<nval>3;
 		$<nval>$ = expr; }
 name:
 	WORD { 
