@@ -170,6 +170,10 @@ static void print_expression_tabbed(node *expr, int tab) {
 		break;
 	case OP_ADD:
 	case OP_SUB:
+	case OP_MULT:
+	case OP_DIV:
+	case OP_EXP:
+	case OP_MOD:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;

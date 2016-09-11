@@ -14,7 +14,7 @@
 	node *root = &r;
 %}
 
-%union { char* sval; node *nval; int ival; }
+%union { char* sval; node *nval; int ival; node_type typeval}
 
 
 %token <sval> WORD
@@ -24,25 +24,36 @@
 %token <ival> INT
 %token PLUS
 %token MINUS
+%token TIMES
+%token DIVIDE
+%token MODULO
+%token EXP
 %%
 root:
 	statement { print_expression($<nval>1); }
 	| root statement { print_expression($<nval>2); }
 statement:
 	expression LINE_END
+binary_operator:
+	PLUS { $<typeval>$ = OP_ADD; }
+	| MINUS { $<typeval>$ = OP_SUB; }
+	| TIMES { $<typeval>$ = OP_MULT; }
+	| DIVIDE { $<typeval>$ = OP_DIV; }
+	| MODULO { $<typeval>$ = OP_MOD; }
+	| EXP { $<typeval>$ = OP_EXP; }
+unary_operator:
+	MINUS {$<typeval>$ = OP_SUB; }
 expression:
 	call
 	| name
 	| number
 	| LPAREN expression RPAREN {
 		$<nval>$ = $<nval>2; }
-	| expression PLUS expression {
-		node *expr = new_binary_node(OP_ADD, $<nval>1, $<nval>3);
-		$<nval>$ = expr; }
-	| expression MINUS expression {
-		node *expr = new_binary_node(OP_SUB, $<nval>1, $<nval>3);
-		$<nval>$ = expr; }
-	| MINUS expression {
+	| expression binary_operator expression {
+		node *expr = new_binary_node($<typeval>2, $<nval>1, $<nval>3);
+		$<nval>$ = expr;
+	}
+	| unary_operator expression {
 		node *expr = malloc(sizeof(node));
 		expr->type = OP_NEGATIVE;
 		expr->data.unary = $<nval>2;
