@@ -179,8 +179,8 @@ static void print_expression_tabbed(node *expr, int tab) {
 		break;
 	case FUNC_CALL:
 		print_expression_tabbed(expr->data.call.function, tab + 1);
-		for(int i = 0; i < expr->data.call.num_params; i++) {
-			print_expression_tabbed(expr->data.call.params[i], tab + 1);
+		for(int i = 0; i < expr->data.call.parameters->data.list.length; i++) {
+			print_expression_tabbed(get_from_list(expr->data.call.parameters, i), tab + 1);
 		}
 		break;
 	case NUM:
