@@ -1,7 +1,7 @@
 //-*-C-*-
 %code requires 
 {
-	#include "expression.h"
+	#include "node.h"
 }
 
 %{
@@ -87,7 +87,6 @@ number:
 		expr->data.integer = $1;
 		$<nval>$ = expr; }
 %%
-
 
 int main(void) {
 	yyparse();

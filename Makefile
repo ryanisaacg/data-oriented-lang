@@ -14,8 +14,8 @@ build/printing.o: printing.h printing.c
 	gcc $(C_FLAGS) printing.c -c -o build/printing.o
 
 
-build/expression.o: expression.c expression.h 
-	gcc $(C_FLAGS) expression.c -c -o build/expression.o
+build/node.o: node.c node.h 
+	gcc $(C_FLAGS) node.c -c -o build/node.o
 
 build/yacc.o: yacc.tab.c
 	gcc -I. -Wno-implicit-function-declaration yacc.tab.c -c -o build/yacc.o
