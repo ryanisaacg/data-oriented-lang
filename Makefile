@@ -10,7 +10,11 @@ clean:
 build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o
 	gcc build/yacc.o build/lex.o build/node.o build/printing.o -o build/parser.out
 
-build/%.o: %.c
+build/printing.o: printing.h printing.c
+	gcc $(C_FLAGS) printing.c -c -o build/printing.o
+
+build/node.o: node.c node.h 
+	gcc $(C_FLAGS) node.c -c -o build/expression.o
 
 build/yacc.o: yacc.tab.c
 	gcc -I. -Wno-implicit-function-declaration yacc.tab.c -c -o build/yacc.o
@@ -22,7 +26,7 @@ lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
 	
 yacc.tab.c: parser.y
-	bison -d -v -byacc parser.y
+	bison -d -byacc parser.y
 
 build:
 	mkdir build
