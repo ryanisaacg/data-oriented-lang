@@ -28,3 +28,7 @@ void add_to_list(node *list, node *item) {
 		add_to_list(list, item);
 	}
 }
+
+node *get_from_list(node *list, int index) {
+	return list->data.list.data[index];
+}
