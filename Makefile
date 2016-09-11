@@ -7,8 +7,8 @@ clean:
 	rm -r build
 	rm lex.c yacc.tab.c
 
-build/parser.out: build build/yacc.o build/lex.o build/expression.o build/printing.o
-	gcc build/yacc.o build/lex.o build/expression.o build/printing.o -o build/parser.out
+build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o
+	gcc build/yacc.o build/lex.o build/node.o build/printing.o -o build/parser.out
 
 build/%.o: %.c
 
@@ -22,7 +22,7 @@ lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
 	
 yacc.tab.c: parser.y
-	bison -d -byacc parser.y
+	bison -d -v -byacc parser.y
 
 build:
 	mkdir build
