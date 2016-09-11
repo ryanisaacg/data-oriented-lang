@@ -16,7 +16,7 @@ typedef enum node_type { OP_ADD, OP_SUB, OP_NEGATIVE, OP_MULT, OP_DIV, OP_MOD, O
 	ROOT,
 	STRING, CHAR, NUM,
 	VALUE_TRUE, VALUE_FALSE } node_type;
-typedef struct { node *function, **params; int num_params; } callnode;
+typedef struct { node *function, *parameters; } callnode;
 typedef struct { node *data; int length, capacity; } listnode;
 typedef union node_data {
 	node *unary;
