@@ -47,9 +47,14 @@ root:
 statement:
 	expression LINE_END
 
+//FUNCTIONS
+param_list:
+	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
+	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
+	| param_list COMMA expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+
 expression:
-	call %prec GROUP
-	| name
+	name
 	| number
 	| '(' expression ')' %prec CALL {
 		$<nval>$ = $<nval>2; }
@@ -60,15 +65,8 @@ expression:
 	| expression '%' expression { $<nval>$ = new_binary_node(OP_MOD, $<nval>1, $<nval>3); }
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
-	
-	
-//FUNCTIONS
-param_list:
-	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
-	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
-	| param_list COMMA expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
-call:
-	expression '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
+	| name '(' param_list ')' %prec GROUP { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); } 
+
 //STRUCT
 struct_param:
 	name type {
