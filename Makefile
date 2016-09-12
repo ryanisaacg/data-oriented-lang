@@ -1,7 +1,6 @@
 C_FLAGS=-Wall -Werror -Wextra -Wfatal-errors -pedantic -std=c99 -Wno-unused-function -Ibuild
 L_FLAGS=
-run: build/parser.out
-	build/./parser.out
+all: build/parser.out
 
 clean:
 	rm -r build
@@ -26,7 +25,7 @@ lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
 	
 yacc.tab.c: parser.y
-	bison -d -byacc parser.y
+	bison -d -v -byacc parser.y
 
 build:
 	mkdir build
