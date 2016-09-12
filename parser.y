@@ -34,6 +34,9 @@
 %right '^'
 %left UMINUS
 
+%nonassoc GROUP
+%nonassoc CALL
+
 %%
 root:
 	statement { print_expression($<nval>1);}
@@ -43,11 +46,12 @@ root:
 	| root struct_def {print_expression($<nval>2); }
 statement:
 	expression LINE_END
+
 expression:
-	call
+	call %prec GROUP
 	| name
 	| number
-	| '(' expression ')' {
+	| '(' expression ')' %prec CALL {
 		$<nval>$ = $<nval>2; }
 	| expression '+' expression { $<nval>$ = new_binary_node(OP_ADD, $<nval>1, $<nval>3); }
 	| expression '-' expression { $<nval>$ = new_binary_node(OP_SUB, $<nval>1, $<nval>3); }
@@ -64,12 +68,7 @@ param_list:
 	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
 	| param_list COMMA expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 call:
-	expression '(' param_list ')' {
-		node *expr = malloc(sizeof(node));
-		expr->type = FUNC_CALL;
-		expr->data.call.function = $<nval>1;
-		expr->data.call.parameters = $<nval>3;
-		$<nval>$ = expr; }
+	expression '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
 //STRUCT
 struct_param:
 	name type {
