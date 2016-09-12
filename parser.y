@@ -29,9 +29,12 @@
 %%
 root:
 	statement { print_expression($<nval>1); $<nval>$ = $<nval>1; }
+	| struct_def {print_expression($<nval>1); }
 	| root statement { print_expression($<nval>2); $<nval>$ = $<nval>1 = $<nval>2;}
+	| root struct_def {print_expression($<nval>2); }
 statement:
 	expression LINE_END
+//OPERATORS
 binary_operator:
 	PLUS { $<typeval>$ = OP_ADD; }
 	| MINUS { $<typeval>$ = OP_SUB; }
@@ -56,6 +59,7 @@ expression:
 		expr->type = OP_NEGATIVE;
 		expr->data.unary = $<nval>2;
 		$<nval>$ = expr; }
+//FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
 	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
@@ -67,6 +71,26 @@ call:
 		expr->data.call.function = $<nval>1;
 		expr->data.call.parameters = $<nval>3;
 		$<nval>$ = expr; }
+//STRUCT
+struct_param:
+	name type {
+		$<nval>$ = new_binary_node(STRUCT_MEMBER, $<nval>1, $<nval>2); }
+struct_body:
+	/*Empty body allowed, because why not */ {$<nval>$ = new_list_node(0); }
+	| struct_param {$<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| struct_body LINE_END struct_param { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+struct_def:
+	'type' name 'struct' LINE_END struct_body LINE_END 'end' { $<nval>$ = new_binary_node(STRUCT, $<nval>2, $<nval>5); }
+//TYPES
+type:
+	WORD {
+		node *expr = malloc(sizeof(node));
+		expr->type = TYPE;
+		expr->data.string = strdup($1);
+		$<nval>$ = expr;
+	}
+
+//SINGLE TOKENS
 name:
 	WORD { 
 		node *expr = malloc(sizeof(node));
