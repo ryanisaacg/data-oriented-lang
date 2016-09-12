@@ -1,0 +1,6 @@
+type Point struct
+	x int
+	y int
+end
+
+1 + 2
