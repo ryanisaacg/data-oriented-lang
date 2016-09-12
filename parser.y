@@ -105,7 +105,12 @@ number:
 		$<nval>$ = expr; }
 %%
 
+extern FILE* yyin;
+
 int main(void) {
+	FILE *input = fopen("current.acc", "r");
+	yyin = input;
 	yyparse();
+	fclose(input);
 	return 0;
 }
