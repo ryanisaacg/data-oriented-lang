@@ -27,7 +27,6 @@
 %token STRUCT_TOKEN
 %token END_TOKEN
 %token WHITESPACE
-%token UMINUS
 
 
 %left '+' '-' '%'
