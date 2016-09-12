@@ -23,13 +23,17 @@
 %token COMMA
 %token LINE_END
 %token <ival> INT
-%token PLUS MINUS MODULO
-%token TIMES DIVIDE
-%token EXP
 %token TYPE_TOKEN
 %token STRUCT_TOKEN
 %token END_TOKEN
 %token WHITESPACE
+%token UMINUS
+
+
+%left '+' '-' '%'
+%left '*' '/'
+%right '^'
+%left UMINUS
 
 %%
 root:
@@ -40,31 +44,24 @@ root:
 	| root struct_def {print_expression($<nval>2); }
 statement:
 	expression LINE_END
-//OPERATORS
-binary_operator:
-	PLUS { $<typeval>$ = OP_ADD; }
-	| MINUS { $<typeval>$ = OP_SUB; }
-	| TIMES { $<typeval>$ = OP_MULT; }
-	| DIVIDE { $<typeval>$ = OP_DIV; }
-	| MODULO { $<typeval>$ = OP_MOD; }
-	| EXP { $<typeval>$ = OP_EXP; }
-unary_operator:
-	MINUS {$<typeval>$ = OP_SUB; }
 expression:
 	call
 	| name
 	| number
 	| '(' expression ')' {
 		$<nval>$ = $<nval>2; }
-	| expression binary_operator expression {
-		node *expr = new_binary_node($<typeval>2, $<nval>1, $<nval>3);
-		$<nval>$ = expr;
-	}
-	| unary_operator expression {
-		node *expr = malloc(sizeof(node));
+	| expression '+' expression { $<nval>$ = new_binary_node(OP_ADD, $<nval>1, $<nval>3); }
+	| expression '-' expression { $<nval>$ = new_binary_node(OP_SUB, $<nval>1, $<nval>3); }
+	| expression '*' expression { $<nval>$ = new_binary_node(OP_MULT, $<nval>1, $<nval>3); }
+	| expression '/' expression { $<nval>$ = new_binary_node(OP_DIV, $<nval>1, $<nval>3); }
+	| expression '%' expression { $<nval>$ = new_binary_node(OP_MOD, $<nval>1, $<nval>3); }
+	| '-' expression %prec UMINUS { node *expr = malloc(sizeof(node));
 		expr->type = OP_NEGATIVE;
 		expr->data.unary = $<nval>2;
-		$<nval>$ = expr; }
+		$<nval>$ = expr;  }
+	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
+	
+	
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
