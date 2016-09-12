@@ -13,8 +13,6 @@
 [A-Za-z_]+[A-Za-z0-9_]* { yylval.sval = yytext; return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }
 [ \t] {}
-"(" { return LPAREN; }
-")" { return RPAREN; }
 "+" { return PLUS; }
 "-" { return MINUS; }
 "*" { return TIMES; }
@@ -23,7 +21,7 @@
 "**" { return EXP; }
 "\n" { line++; return LINE_END; }
 "\r" {}
-"," { return COMMA; }
+. { return yytext[0]; }
 %%
 void yyerror(char *message) {
 	fprintf(stderr, "%s at line %d", message, line);

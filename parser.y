@@ -18,8 +18,8 @@
 
 
 %token <sval> WORD
-%token LPAREN
-%token RPAREN
+%token '('
+%token ')'
 %token COMMA
 %token LINE_END
 %token <ival> INT
@@ -54,7 +54,7 @@ expression:
 	call
 	| name
 	| number
-	| LPAREN expression RPAREN {
+	| '(' expression ')' {
 		$<nval>$ = $<nval>2; }
 	| expression binary_operator expression {
 		node *expr = new_binary_node($<typeval>2, $<nval>1, $<nval>3);
@@ -71,7 +71,7 @@ param_list:
 	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
 	| param_list COMMA expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 call:
-	expression LPAREN param_list RPAREN {
+	expression '(' param_list ')' {
 		node *expr = malloc(sizeof(node));
 		expr->type = FUNC_CALL;
 		expr->data.call.function = $<nval>1;
