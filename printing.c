@@ -206,8 +206,11 @@ static void print_expression_tabbed(node *expr, int tab) {
 		for(int i = 0; i < expr->data.list.length; i++) {
 			print_expression_tabbed(get_from_list(expr, i), tab + 1);
 		}
+	case ROOT:
+		print_expression_tabbed(expr->data.unary, tab);
+		break;
 	default:
-		fprintf(stderr, "Unexpected node type");
+		fprintf(stderr, "Unexpected node type: %d", expr->type);
 		break;
 	}
 }
