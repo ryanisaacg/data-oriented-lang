@@ -156,7 +156,7 @@ static char *statement_to_string(node_type type) {
 		case STRUCT_MEMBER:
 			return "MEMBER";
 		break;
-		case STRUCT:
+		case STRUCT_DELARATION:
 			return "STRUCT";
 		break;
 		case LIST:
@@ -184,7 +184,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case OP_EXP:
 	case OP_MOD:
 	case STRUCT_MEMBER:
-	case STRUCT:
+	case STRUCT_DELARATION:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;
@@ -198,8 +198,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 		printf("%d", expr->data.integer);
 		break;
 	case STRING:
-		printf("%s", expr->data.string);
-		break;
+	case TYPE:
 	case NAME:
 		printf("%s", expr->data.string);
 		break;
