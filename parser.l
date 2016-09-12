@@ -3,8 +3,9 @@
 	#include "yacc.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
-	int line = 0;
 %}
+
+%option yylineno
 
 %%
 "type" { return TYPE_TOKEN; }
@@ -19,12 +20,12 @@
 "/" { return DIVIDE; }
 "%" { return MODULO; }
 "**" { return EXP; }
-"\n" { line++; return LINE_END; }
+"\n" { return LINE_END; }
 "\r" {}
 . { return yytext[0]; }
 %%
 void yyerror(char *message) {
-	fprintf(stderr, "%s at line %d", message, line);
+	fprintf(stderr, "%s at line %d", message, yylineno);
 }
 int yywrap(void) {
 	return 1;
