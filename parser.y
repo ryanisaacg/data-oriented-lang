@@ -55,10 +55,7 @@ expression:
 	| expression '*' expression { $<nval>$ = new_binary_node(OP_MULT, $<nval>1, $<nval>3); }
 	| expression '/' expression { $<nval>$ = new_binary_node(OP_DIV, $<nval>1, $<nval>3); }
 	| expression '%' expression { $<nval>$ = new_binary_node(OP_MOD, $<nval>1, $<nval>3); }
-	| '-' expression %prec UMINUS { node *expr = malloc(sizeof(node));
-		expr->type = OP_NEGATIVE;
-		expr->data.unary = $<nval>2;
-		$<nval>$ = expr;  }
+	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	
 	

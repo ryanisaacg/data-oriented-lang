@@ -10,6 +10,13 @@ node *new_binary_node(node_type type, node *left, node *right) {
 	return new;
 }
 
+node *new_unary_node(node_type type, node *operand) {
+	node *expr = malloc(sizeof(node));
+	expr->type = type;
+	expr->data.unary = operand;
+	return expr;
+}
+
 node *new_list_node(int initial_size) {
 	node *new = malloc(sizeof(node));
 	new->type = LIST;
