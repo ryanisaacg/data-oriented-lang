@@ -1,6 +1,7 @@
+1 + 2
+
 type Point struct
 	x int
 	y int
+	z int
 end
-
-1 + 2
