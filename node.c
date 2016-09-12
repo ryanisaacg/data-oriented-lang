@@ -12,6 +12,7 @@ node *new_binary_node(node_type type, node *left, node *right) {
 
 node *new_list_node(int initial_size) {
 	node *new = malloc(sizeof(node));
+	new->type = LIST;
 	new->data.list.data = malloc(sizeof(node) * initial_size);
 	new->data.list.capacity = initial_size;
 	new->data.list.length = 0;

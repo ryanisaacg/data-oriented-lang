@@ -153,6 +153,15 @@ static char *statement_to_string(node_type type) {
         case VALUE_FALSE:
             return "FALSE";
         break;
+		case STRUCT_MEMBER:
+			return "MEMBER";
+		break;
+		case STRUCT:
+			return "STRUCT";
+		break;
+		case LIST:
+			return "LIST";
+		break;
 		default:
 			return "UNKNOWN_AST_TYPE";
 		break;
@@ -174,6 +183,8 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case OP_DIV:
 	case OP_EXP:
 	case OP_MOD:
+	case STRUCT_MEMBER:
+	case STRUCT:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;
@@ -192,6 +203,10 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case NAME:
 		printf("%s", expr->data.string);
 		break;
+	case LIST:
+		for(int i = 0; i < expr->data.list.length; i++) {
+			print_expression_tabbed(get_from_list(expr, i), tab + 1);
+		}
 	default:
 		fprintf(stderr, "Unexpected node type");
 		break;
