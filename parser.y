@@ -157,6 +157,7 @@ int main(void) {
 	FILE *input = fopen("current.acc", "r");
 	yyin = input;
 	node root;
+	root.type = ROOT;
 	root.data.root.ext_list = new_list_node(10);
 	root.data.root.struct_list = new_list_node(10);
 	root.data.root.func_list = new_list_node(10);
