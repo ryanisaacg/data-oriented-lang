@@ -5,5 +5,6 @@ This language is designed around arrays and data contiguity, which is very impor
 
 ##TODO
 
+[ ] Fix dot operator bug
 [ ] Instant symbol table insertion while parsing
 [ ] Improved error messages

@@ -39,6 +39,7 @@
 %left '*' '/'
 %right '^'
 %nonassoc UMINUS
+%left '.'
 
 %parse-param {node *root_node}
 
@@ -75,6 +76,7 @@ expression:
 	| expression '/' expression { $<nval>$ = new_binary_node(OP_DIV, $<nval>1, $<nval>3); }
 	| expression '%' expression { $<nval>$ = new_binary_node(OP_MOD, $<nval>1, $<nval>3); }
 	| expression '=' expression { $<nval>$ = new_binary_node(OP_ASSIGN, $<nval>1, $<nval>3); }
+	| expression '.' expression { $<nval>$ = new_binary_node(OP_MEMBER, $<nval>1, $<nval>3); }
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }

@@ -21,6 +21,7 @@
 [A-Za-z_]+[A-Za-z0-9_]* { yylval.sval = yytext; return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }
 [ \t] {}
+"#".*"\n" {} /*Comments*/
 "\n" { return LINE_END; }
 "\r" {}
 . { return yytext[0]; }
