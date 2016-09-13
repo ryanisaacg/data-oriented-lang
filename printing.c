@@ -185,6 +185,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case OP_MOD:
 	case STRUCT_MEMBER:
 	case STRUCT_DELARATION:
+	case FUNC_CALL:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;
