@@ -10,6 +10,7 @@
 %%
 "type" { return TYPE_TOKEN; }
 "struct" { return STRUCT_TOKEN; }
+"func" { return FUNC_TOKEN; }
 "end" { return END_TOKEN; }
 [A-Za-z_]+[A-Za-z0-9_]* { yylval.sval = yytext; return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }

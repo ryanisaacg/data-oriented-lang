@@ -23,6 +23,7 @@
 %token TYPE_TOKEN
 %token STRUCT_TOKEN
 %token END_TOKEN
+%token FUNC_TOKEN
 %token WHITESPACE
 
 
@@ -33,11 +34,11 @@
 
 %%
 root:
-	statement { print_expression($<nval>1);}
-	| struct_def {print_expression($<nval>1); }
+	/* Empty root */
 	| root LINE_END
-	| root statement { print_expression($<nval>2); }
-	| root struct_def {print_expression($<nval>2); }
+	| root struct_def { print_expression($<nval>2); }
+	| root function_def {print_expression($<nval>2); }
+
 statement:
 	expression LINE_END
 
@@ -62,15 +63,33 @@ expression:
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); } 
 
 //STRUCT
-struct_param:
+name_type_pair:
 	name type {
 		$<nval>$ = new_binary_node(STRUCT_MEMBER, $<nval>1, $<nval>2); }
 struct_body:
 	/*Empty body allowed, because why not */ {$<nval>$ = new_list_node(0); }
-	| struct_param {$<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
-	| struct_body LINE_END struct_param { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+	| name_type_pair {$<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| struct_body LINE_END name_type_pair { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 struct_def:
-	TYPE_TOKEN name STRUCT_TOKEN LINE_END struct_body LINE_END END_TOKEN LINE_END{ $<nval>$ = new_binary_node(STRUCT_DELARATION, $<nval>2, $<nval>5); }
+	TYPE_TOKEN name STRUCT_TOKEN LINE_END struct_body LINE_END END_TOKEN { $<nval>$ = new_binary_node(STRUCT_DELARATION, $<nval>2, $<nval>5); }
+//FUNCTION DECLARATIONS
+function_params:
+	/*Empty body allowed, because why not */ {$<nval>$ = new_list_node(0); }
+	| name_type_pair {$<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| function_params ',' name_type_pair { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+block:
+	/*Empty block*/ { $<nval>$ = new_list_node(0); }
+	| statement { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| block statement { add_to_list($<nval>1, $<nval>2); $<nval>$ = $<nval>1; }
+function_def:
+	FUNC_TOKEN name '(' function_params ')' type LINE_END block END_TOKEN {
+		node *func = malloc(sizeof(node));
+		func->type = FUNCTION_DECLARATION;
+		func->data.func.name = $<nval>2;
+		func->data.func.return_type = $<nval>6;
+		func->data.func.params = $<nval>4;
+		func->data.func.body = $<nval>8;
+		$<nval>$ = func; }
 //TYPES
 type:
 	WORD {

@@ -1,7 +1,9 @@
-1 * -2 ^ 3
-
 type Point struct
 	x int
 	y int
-	z int
+end
+
+func length (point Point) float
+	1 + 2 * 3
+	1 + 2 * 4
 end

@@ -159,6 +159,9 @@ static char *statement_to_string(node_type type) {
 		case STRUCT_DELARATION:
 			return "STRUCT";
 		break;
+		case FUNCTION_DECLARATION:
+			return "FUNC";
+		break;
 		case LIST:
 			return "LIST";
 		break;
@@ -202,6 +205,12 @@ static void print_expression_tabbed(node *expr, int tab) {
 		for(int i = 0; i < expr->data.list.length; i++) {
 			print_expression_tabbed(get_from_list(expr, i), tab + 1);
 		}
+		break;
+	case FUNCTION_DECLARATION:
+		print_expression_tabbed(expr->data.func.name, tab + 1);
+		print_expression_tabbed(expr->data.func.return_type, tab + 1);
+		print_expression_tabbed(expr->data.func.params, tab + 1);
+		print_expression_tabbed(expr->data.func.body, tab + 1);
 	case ROOT:
 		break;
 	default:
