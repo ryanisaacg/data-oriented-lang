@@ -15,6 +15,8 @@
 "if" { return IF_TOKEN; }
 "while" { return WHILE_TOKEN; }
 "return" { return RETURN_TOKEN; }
+"export" { return EXPORT_TOKEN; }
+"import" { return IMPORT_TOKEN; }
 [A-Za-z_]+[A-Za-z0-9_]* { yylval.sval = yytext; return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }
 [ \t] {}

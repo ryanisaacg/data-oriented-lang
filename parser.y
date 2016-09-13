@@ -30,6 +30,8 @@
 %token IF_TOKEN
 %token WHILE_TOKEN
 %token RETURN_TOKEN 
+%token EXPORT_TOKEN
+%token IMPORT_TOKEN
 
 %left '=' 
 %left '+' '-' '%'
@@ -43,6 +45,15 @@ root:
 	| root LINE_END
 	| root struct_def { print_expression($<nval>2); }
 	| root function_def {print_expression($<nval>2); }
+	| root external { print_expression($<nval>2); }
+//EXPORTS / IMPORTS
+path:
+	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| path '.' name {add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1;}
+external:
+	EXPORT_TOKEN path { $<nval>$ = new_unary_node(EXPORT, $<nval>2); }
+	| IMPORT_TOKEN path { $<nval>$ = new_unary_node(IMPORT, $<nval>2); }
+	
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 

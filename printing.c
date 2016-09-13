@@ -171,9 +171,6 @@ static char *statement_to_string(node_type type) {
 		case IMPORT:
 			return "IMPORT";
 		break;
-		case PATH:
-			return "PATH";
-		break;
 		default:
 			return "UNKNOWN_AST_TYPE";
 		break;
@@ -188,6 +185,8 @@ static void print_expression_tabbed(node *expr, int tab) {
 	switch(expr->type) {
 	case OP_NEGATIVE:
 	case RETURN:
+	case EXPORT:
+	case IMPORT:
 		print_expression_tabbed(expr->data.unary, tab + 1);
 		break;
 	case OP_ADD:
