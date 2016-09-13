@@ -6,5 +6,6 @@ type Point struct
 end
 
 func length (Point point) float
-	return (point.y ^ 2 + point.x ^ 2) ^ 0.5f
+	var int x = 5, n, y = 6, z
+	return x
 end

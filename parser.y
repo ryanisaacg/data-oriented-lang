@@ -32,6 +32,7 @@
 %token RETURN_TOKEN 
 %token EXPORT_TOKEN
 %token IMPORT_TOKEN
+%token VAR_TOKEN
 
 %left '=' 
 %left '+' '-' '%'
@@ -74,7 +75,13 @@ expression:
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); } 
-
+declare_list:
+	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| name '=' expression { $<nval>$ = new_list_node(10); add_to_list($<nval>$, new_binary_node(OP_ASSIGN, $<nval>1, $<nval>3)); }
+	| declare_list ',' name { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+	| declare_list ',' name '=' expression { add_to_list($<nval>1, new_binary_node(OP_ASSIGN, $<nval>3, $<nval>5)); $<nval>$ = $<nval>1;}
+variable_declaration:
+	VAR_TOKEN type declare_list { $<nval>$ = new_binary_node(OP_INIT, $<nval>2, $<nval>3); }
 //STRUCT
 name_type_pair:
 	type name {
@@ -105,6 +112,7 @@ function_def:
 statement:
 	expression LINE_END
 	| control LINE_END
+	| variable_declaration LINE_END
 	| RETURN_TOKEN expression LINE_END { $<nval>$ = new_unary_node(RETURN, $<nval>2); }
 //CONTROL STRUCTURES
 control:
