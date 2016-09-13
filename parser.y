@@ -76,6 +76,7 @@ expression:
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
 	| type '{' param_list '}' { $<nval>$ = new_binary_node(TYPE_LITERAL, $<nval>1, $<nval>3); }
+	| '[' param_list ']' {$<nval>$ = new_unary_node(ARRAY_LITERAL, $<nval>2); }
 declare_list:
 	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
 	| name '=' expression { $<nval>$ = new_list_node(10); add_to_list($<nval>$, new_binary_node(OP_ASSIGN, $<nval>1, $<nval>3)); }

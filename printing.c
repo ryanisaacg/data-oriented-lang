@@ -177,6 +177,9 @@ static char *statement_to_string(node_type type) {
 		case TYPE_LITERAL:
 			return "TYPE LITERAL";
 		break;
+		case ARRAY_LITERAL:
+			return "ARRAY LITERAL";
+		break;
 		default:
 			return "UNKNOWN_AST_TYPE";
 		break;
@@ -194,6 +197,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case EXPORT:
 	case IMPORT:
 	case ARRAY_OF:
+	case ARRAY_LITERAL:
 		print_expression_tabbed(expr->data.unary, tab + 1);
 		break;
 	case OP_ADD:
