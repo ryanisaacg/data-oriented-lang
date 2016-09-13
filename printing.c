@@ -165,6 +165,15 @@ static char *statement_to_string(node_type type) {
 		case LIST:
 			return "LIST";
 		break;
+		case EXPORT:
+			return "EXPORT";
+		break;
+		case IMPORT:
+			return "IMPORT";
+		break;
+		case PATH:
+			return "PATH";
+		break;
 		default:
 			return "UNKNOWN_AST_TYPE";
 		break;
