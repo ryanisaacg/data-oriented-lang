@@ -21,9 +21,12 @@ typedef enum node_type { OP_ADD, OP_SUB, OP_NEGATIVE, OP_MULT, OP_DIV, OP_MOD, O
 	ARRAY_OF} node_type;
 typedef struct { node *data; int length, capacity; } listnode;
 typedef struct { node *name, *return_type, *params, *body; } funcnode;
+typedef struct { node *struct_list, *func_list, *main_list, *ext_list; } rootnode;
+
 typedef union node_data {
 	node *unary;
 	node *binary[2];
+	rootnode root;
 	listnode list;
 	funcnode func;
 	char *string;

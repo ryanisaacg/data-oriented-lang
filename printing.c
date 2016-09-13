@@ -236,6 +236,10 @@ static void print_expression_tabbed(node *expr, int tab) {
 		print_expression_tabbed(expr->data.func.params, tab + 1);
 		print_expression_tabbed(expr->data.func.body, tab + 1);
 	case ROOT:
+		print_expression_tabbed(expr->data.root.ext_list, tab + 1);
+		print_expression_tabbed(expr->data.root.struct_list, tab + 1);
+		print_expression_tabbed(expr->data.root.func_list, tab + 1);
+		print_expression_tabbed(expr->data.root.main_list, tab + 1);
 		break;
 	default:
 		fprintf(stderr, "Unexpected node type: %d", expr->type);

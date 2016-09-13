@@ -40,13 +40,16 @@
 %right '^'
 %nonassoc UMINUS
 
+%parse-param {node *root_node}
+
 %%
 root:
 	/* Empty root */
 	| root LINE_END
-	| root struct_def { print_expression($<nval>2); }
-	| root function_def {print_expression($<nval>2); }
-	| root external { print_expression($<nval>2); }
+	| root struct_def { add_to_list(root_node->data.root.struct_list, $<nval>2); }
+	| root function_def { add_to_list(root_node->data.root.func_list, $<nval>2); }
+	| root external { add_to_list(root_node->data.root.ext_list, $<nval>2); }
+	| root statement { add_to_list(root_node->data.root.main_list, $<nval>2); }
 //EXPORTS / IMPORTS
 path:
 	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
@@ -151,7 +154,13 @@ extern FILE* yyin;
 int main(void) {
 	FILE *input = fopen("current.acc", "r");
 	yyin = input;
-	yyparse();
+	node root;
+	root.data.root.ext_list = new_list_node(10);
+	root.data.root.struct_list = new_list_node(10);
+	root.data.root.func_list = new_list_node(10);
+	root.data.root.main_list = new_list_node(10);
+	yyparse(&root);
+	print_expression(&root);
 	fclose(input);
 	return 0;
 }

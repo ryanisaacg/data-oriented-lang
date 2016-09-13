@@ -6,7 +6,11 @@ type Point struct
 end
 
 func length (Point point) float
-	var int x = 5, n, y = 6, z
-	var [int] array = [0, 1, 2, 3, 4]
-	return x
+	return 0
 end
+
+var [Point] list;
+list = [Point{0, 0}, Point{5, 5}, Point{1, 4}, Point{4, 8}]
+var lengths = map(length, list)
+foreach(print, lengths) #0, 7.07106781186548, 4.12310562561766, 8.94427190999916
+	
