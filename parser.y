@@ -31,9 +31,6 @@
 %right '^'
 %left UMINUS
 
-%nonassoc GROUP
-%nonassoc CALL
-
 %%
 root:
 	statement { print_expression($<nval>1);}
@@ -53,7 +50,7 @@ param_list:
 expression:
 	name
 	| number
-	| '(' expression ')' %prec CALL {
+	| '(' expression ')' {
 		$<nval>$ = $<nval>2; }
 	| expression '+' expression { $<nval>$ = new_binary_node(OP_ADD, $<nval>1, $<nval>3); }
 	| expression '-' expression { $<nval>$ = new_binary_node(OP_SUB, $<nval>1, $<nval>3); }
@@ -62,7 +59,7 @@ expression:
 	| expression '%' expression { $<nval>$ = new_binary_node(OP_MOD, $<nval>1, $<nval>3); }
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
-	| name '(' param_list ')' %prec GROUP { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); } 
+	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); } 
 
 //STRUCT
 struct_param:
