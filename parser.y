@@ -25,7 +25,8 @@
 %token END_TOKEN
 %token FUNC_TOKEN
 %token WHITESPACE
-
+%token IF_TOKEN
+%token WHILE_TOKEN
 
 %left '+' '-' '%'
 %left '*' '/'
@@ -38,10 +39,6 @@ root:
 	| root LINE_END
 	| root struct_def { print_expression($<nval>2); }
 	| root function_def {print_expression($<nval>2); }
-
-statement:
-	expression LINE_END
-
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
@@ -90,6 +87,13 @@ function_def:
 		func->data.func.params = $<nval>4;
 		func->data.func.body = $<nval>8;
 		$<nval>$ = func; }
+statement:
+	expression LINE_END
+	| control LINE_END
+//CONTROL STRUCTURES
+control:
+	IF_TOKEN expression LINE_END block END_TOKEN  { $<nval>$ = new_binary_node(IF, $<nval>2, $<nval>4); }
+	| WHILE_TOKEN expression LINE_END block END_TOKEN  { $<nval>$ = new_binary_node(WHILE, $<nval>2, $<nval>4);	}
 //TYPES
 type:
 	WORD {
