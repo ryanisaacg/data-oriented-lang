@@ -1,15 +1,16 @@
 export length
 
 type Point struct
-	x int
-	y int
+	int x 
+	int y
 end
 
-func length (point Point) float
-	return (point.y ** 2 + point.x ** 2) ** 0.5f
+func length (Point point) float
+	return (point.y ^ 2 + point.x ^ 2) ^ 0.5f
 end
 
-list [Point] := [Point{0, 0}, Point{5, 5}, Point{1, 4}, Point{4, 8}]
-lengths := map(length, list)
+var [Point] list;
+list = [Point{0, 0}, Point{5, 5}, Point{1, 4}, Point{4, 8}]
+var lengths = map(length, list)
 foreach(print, lengths) #0, 7.07106781186548, 4.12310562561766, 8.94427190999916
 	

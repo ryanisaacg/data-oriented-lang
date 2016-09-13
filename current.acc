@@ -1,17 +1,10 @@
 export length
 
 type Point struct
-	x int
-	y int
+	int x 
+	int y
 end
 
-func length (point Point) float
-	if 1
-		print(1 + 2)
-	end
-	while 3
-		print(3)
-	end
-	x = 1 + 2 * 3
-	return x
+func length (Point point) float
+	return (point.y ^ 2 + point.x ^ 2) ^ 0.5f
 end

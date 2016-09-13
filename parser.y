@@ -77,7 +77,7 @@ expression:
 
 //STRUCT
 name_type_pair:
-	name type {
+	type name {
 		$<nval>$ = new_binary_node(STRUCT_MEMBER, $<nval>1, $<nval>2); }
 struct_body:
 	/*Empty body allowed, because why not */ {$<nval>$ = new_list_node(0); }
