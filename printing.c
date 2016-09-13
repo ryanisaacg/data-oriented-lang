@@ -196,6 +196,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case OP_DIV:
 	case OP_EXP:
 	case OP_MOD:
+	case OP_ASSIGN:
 	case STRUCT_MEMBER:
 	case STRUCT_DELARATION:
 	case FUNC_CALL:

@@ -10,6 +10,6 @@ func length (point Point) float
 	while 3
 		print(3)
 	end
-	1 + 2 * 3
-	return 1 + 2 * 4
+	x = 1 + 2 * 3
+	return x
 end
