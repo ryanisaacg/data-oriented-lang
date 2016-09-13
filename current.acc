@@ -7,6 +7,6 @@ end
 
 func length (Point point) float
 	var int x = 5, n, y = 6, z
-	var [int] array
+	var [int] array = [int]{0, 1, 2, 3, 4}
 	return x
 end

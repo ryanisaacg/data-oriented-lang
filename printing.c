@@ -173,6 +173,10 @@ static char *statement_to_string(node_type type) {
 		break;
 		case ARRAY_OF:
 			return "ARRAY";
+		break;
+		case TYPE_LITERAL:
+			return "TYPE LITERAL";
+		break;
 		default:
 			return "UNKNOWN_AST_TYPE";
 		break;
@@ -200,6 +204,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case OP_MOD:
 	case OP_ASSIGN:
 	case OP_INIT:
+	case TYPE_LITERAL:
 	case STRUCT_MEMBER:
 	case STRUCT_DELARATION:
 	case FUNC_CALL:
@@ -207,7 +212,6 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case WHILE:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
-		break;
 		break;
 	case NUM:
 		printf("%d", expr->data.integer);
