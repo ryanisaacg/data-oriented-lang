@@ -26,11 +26,12 @@
 %token WHITESPACE
 %token IF_TOKEN
 %token WHILE_TOKEN
+%token RETURN_TOKEN 
 
 %left '+' '-' '%'
 %left '*' '/'
 %right '^'
-%precedence UMINUS
+%nonassoc UMINUS
 
 %%
 root:
@@ -88,6 +89,7 @@ function_def:
 statement:
 	expression LINE_END
 	| control LINE_END
+	| RETURN_TOKEN expression LINE_END { $<nval>$ = new_unary_node(RETURN, $<nval>2); }
 //CONTROL STRUCTURES
 control:
 	IF_TOKEN expression LINE_END block END_TOKEN  { $<nval>$ = new_binary_node(IF, $<nval>2, $<nval>4); }
