@@ -126,9 +126,7 @@ type:
 		expr->data.string = strdup($1);
 		$<nval>$ = expr;
 	}
-	| '[' type ']' {
-		$<nval>$ = new_unary_node(ARRAY_OF, $<nval>2);
-	}
+	| '[' type ']' { $<nval>$ = new_unary_node(ARRAY_OF, $<nval>2);	}
 
 //SINGLE TOKENS
 name:
