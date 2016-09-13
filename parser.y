@@ -16,14 +16,17 @@
 
 %union { char* sval; node *nval; int ival; node_type typeval;}
 
+//Values
 %token <sval> WORD
-%token LINE_END
 %token <ival> INT
+//Special placeholders
+%token WHITESPACE
+%token LINE_END
+//Reserved words
 %token TYPE_TOKEN
 %token STRUCT_TOKEN
 %token END_TOKEN
 %token FUNC_TOKEN
-%token WHITESPACE
 %token IF_TOKEN
 %token WHILE_TOKEN
 %token RETURN_TOKEN 
