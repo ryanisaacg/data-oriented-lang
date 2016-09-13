@@ -130,7 +130,7 @@ type:
 	WORD {
 		node *expr = malloc(sizeof(node));
 		expr->type = TYPE;
-		expr->data.string = strdup($1);
+		expr->data.string = $1;
 		$<nval>$ = expr;
 	}
 	| '[' type ']' { $<nval>$ = new_unary_node(ARRAY_OF, $<nval>2);	}
@@ -140,7 +140,7 @@ name:
 	WORD { 
 		node *expr = malloc(sizeof(node));
 		expr->type = NAME;
-		expr->data.string = strdup($1);
+		expr->data.string = $1;
 		$<nval>$ = expr; }
 number:
 	INT {
