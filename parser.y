@@ -18,9 +18,6 @@
 
 
 %token <sval> WORD
-%token '('
-%token ')'
-%token COMMA
 %token LINE_END
 %token <ival> INT
 %token TYPE_TOKEN
@@ -51,7 +48,7 @@ statement:
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
 	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
-	| param_list COMMA expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+	| param_list ',' expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 
 expression:
 	name
