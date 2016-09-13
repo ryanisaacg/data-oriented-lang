@@ -25,7 +25,7 @@ lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
 	
 yacc.tab.c: parser.y
-	bison -d -byacc parser.y -Wall -v
+	bison -d -byacc parser.y -Wall -v -Wno-empty-rule
 
 build:
 	mkdir build
