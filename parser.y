@@ -16,7 +16,6 @@
 
 %union { char* sval; node *nval; int ival; node_type typeval;}
 
-
 %token <sval> WORD
 %token LINE_END
 %token <ival> INT
@@ -31,7 +30,7 @@
 %left '+' '-' '%'
 %left '*' '/'
 %right '^'
-%left UMINUS
+%precedence UMINUS
 
 %%
 root:
@@ -75,8 +74,7 @@ function_params:
 	| name_type_pair {$<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
 	| function_params ',' name_type_pair { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 block:
-	/*Empty block*/ { $<nval>$ = new_list_node(0); }
-	| statement { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	/*Empty block*/ { $<nval>$ = new_list_node(10); }
 	| block statement { add_to_list($<nval>1, $<nval>2); $<nval>$ = $<nval>1; }
 function_def:
 	FUNC_TOKEN name '(' function_params ')' type LINE_END block END_TOKEN {
