@@ -3,11 +3,11 @@
 #include "node.h"
 #include "table.h"
 
-static void analyze_node(node *current, symbol_table *types, symbol_table *values);
+static void analyze_node(node *current, table *types, table *values);
 
 void analyze(rootnode root) {
-	symbol_table *types = new_root_table();
-	symbol_table *values = new_root_table();
+	table *types = new_root_table();
+	table *values = new_root_table();
 	listnode struct_list = root.struct_list->data.list;
 	listnode func_list = root.func_list->data.list;
 	listnode main_list = root.main_list->data.list;
@@ -28,6 +28,6 @@ void analyze(rootnode root) {
 	analyze_node(main, types, values);
 }
 
-static void analyze_node(node *current, symbol_table *types, symbol_table *values) {
-	
+static void analyze_node(node *current, table *types, table *values) {
+
 }
