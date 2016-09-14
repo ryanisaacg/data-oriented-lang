@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-typedef enum { BINARY_OPERATOR, UNARY_OPERATOR, WORD, CONTROL, FOR, CALL, LIST, TYPE, FUNCTION, STRUCT, ROOT} c_ast_type;
+typedef enum { C_BINARY_OPERATOR, C_UNARY_OPERATOR, C_WORD, C_CONTROL, C_FOR, C_CALL, C_LIST, C_TYPE, C_FUNCTION, C_STRUCT, C_ROOT} c_ast_type;
 
 struct c_ast_node;
 typedef struct c_ast_node c_ast_node;
