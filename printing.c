@@ -242,6 +242,9 @@ static void print_expression_tabbed(node *expr, int tab) {
 		print_expression_tabbed(expr->data.root.func_list, tab + 1);
 		print_expression_tabbed(expr->data.root.main_list, tab + 1);
 		break;
+	case VALUE_TRUE:
+	case VALUE_FALSE:
+		break;
 	default:
 		fprintf(stderr, "Unexpected node type: %d", expr->type);
 		break;

@@ -18,6 +18,8 @@
 "export" { return EXPORT_TOKEN; }
 "import" { return IMPORT_TOKEN; }
 "var" { return VAR_TOKEN; }
+"true" { return TRUE_TOKEN; }
+"false" { return FALSE_TOKEN; }
 [A-Za-z_]+[A-Za-z0-9_]* { 
 	char *text = strdup(yytext); 
 	int len = strlen(text);

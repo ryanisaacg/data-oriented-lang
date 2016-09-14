@@ -33,6 +33,8 @@
 %token EXPORT_TOKEN
 %token IMPORT_TOKEN
 %token VAR_TOKEN
+%token TRUE_TOKEN
+%token FALSE_TOKEN
 
 %left '=' 
 %left '+' '-' '%'
@@ -68,6 +70,7 @@ param_list:
 expression:
 	name
 	| number
+	| boolean
 	| '(' expression ')' {
 		$<nval>$ = $<nval>2; }
 	| expression '+' expression { $<nval>$ = new_binary_node(OP_ADD, $<nval>1, $<nval>3); }
@@ -148,7 +151,15 @@ number:
 		expr->type = NUM;
 		expr->data.integer = $1;
 		$<nval>$ = expr; }
-
+boolean:
+	TRUE_TOKEN {
+		node *expr = malloc(sizeof(node));
+		expr->type = VALUE_TRUE;
+		$<nval>$ = expr; }
+	| FALSE_TOKEN {
+		node *expr = malloc(sizeof(node));
+		expr->type = VALUE_FALSE;
+		$<nval>$ = expr; }
 %%
 
 extern FILE* yyin;
