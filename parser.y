@@ -5,11 +5,14 @@
 }
 
 %{
+	#include "analyzer.h"
+	#include "output.h"
 	#include "printing.h"
-	#include "yacc.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
+	#include "yacc.tab.h"
+
 	node r = {.data = {.unary = NULL}, .type= ROOT};
 	node *root = &r;
 %}
@@ -174,6 +177,11 @@ int main(void) {
 	root.data.root.func_list = new_list_node(10);
 	root.data.root.main_list = new_list_node(10);
 	yyparse(&root);
+	fclose(input);
+	c_ast_node result = analyze(root);
+	FILE *out = fopen("output.c", "w");
+	c_write(out, result);
+	fclose(out);
 	print_expression(&root);
 	fclose(input);
 	return 0;
