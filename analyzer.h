@@ -1,5 +1,6 @@
 #pragma once
 
 #include "node.h"
+#include "output.h"
 
-void analyze(rootnode root);
+c_ast_node analyze(rootnode root);
