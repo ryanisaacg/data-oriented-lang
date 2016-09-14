@@ -1,5 +1,5 @@
 //-*-C-*-
-%code requires 
+%code requires
 {
 	#include "node.h"
 }
@@ -32,14 +32,14 @@
 %token FUNC_TOKEN
 %token IF_TOKEN
 %token WHILE_TOKEN
-%token RETURN_TOKEN 
+%token RETURN_TOKEN
 %token EXPORT_TOKEN
 %token IMPORT_TOKEN
 %token VAR_TOKEN
 %token TRUE_TOKEN
 %token FALSE_TOKEN
 
-%left '=' 
+%left '='
 %left '+' '-' '%'
 %left '*' '/'
 %right '^'
@@ -63,10 +63,10 @@ path:
 external:
 	EXPORT_TOKEN path { $<nval>$ = new_unary_node(EXPORT, $<nval>2); }
 	| IMPORT_TOKEN path { $<nval>$ = new_unary_node(IMPORT, $<nval>2); }
-	
+
 //FUNCTIONS
 param_list:
-	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); } 
+	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); }
 	| expression { node *list = new_list_node(10); add_to_list(list, $<nval>1); $<nval>$ = list; }
 	| param_list ',' expression { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 
@@ -143,7 +143,7 @@ type:
 
 //SINGLE TOKENS
 name:
-	WORD { 
+	WORD {
 		node *expr = malloc(sizeof(node));
 		expr->type = NAME;
 		expr->data.string = $1;
@@ -178,7 +178,7 @@ int main(void) {
 	root.data.root.main_list = new_list_node(10);
 	yyparse(&root);
 	fclose(input);
-	c_ast_node result = analyze(root);
+	c_ast_node result = analyze(root.data.root);
 	FILE *out = fopen("output.c", "w");
 	c_write(out, result);
 	fclose(out);
