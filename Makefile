@@ -6,9 +6,15 @@ clean:
 	rm -r build
 	rm lex.c yacc.tab.c
 
-build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o
-	gcc build/yacc.o build/lex.o build/node.o build/printing.o -o build/parser.out
+build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o
+	gcc build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o -o build/parser.out
 
+build/analyzer.o: analyzer.h analyzer.c build/table.o build/node.o
+	gcc $(C_FLAGS) analyzer.c -c -o build/analyzer.o
+	
+build/table.o: table.h table.c
+	gcc $(C_FLAGS) table.c -c -o build/table.o
+	
 build/printing.o: printing.h printing.c build/node.o
 	gcc $(C_FLAGS) printing.c -c -o build/printing.o
 
