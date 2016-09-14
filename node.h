@@ -34,8 +34,10 @@ struct node {
 		int integer;
 	} data;
 	node_type type;
+	node *semantic_type;
 };
 
+node *new_node(node_type type);
 node *new_binary_node(node_type type, node *left, node *right);
 node *new_unary_node(node_type type, node *operand);
 node *new_list_node(int initial_size);
