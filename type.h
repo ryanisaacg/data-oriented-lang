@@ -1,6 +1,6 @@
 #pragma once
 
-struct node; //Including node.h causes circular imports
+struct node;
 
 #include <stdbool.h>
 
@@ -20,7 +20,7 @@ typedef struct {
 } type_modifier;
 
 typedef union {
-	node *declared;
+	struct node *declared;
 	type_modifier modified;
 	primitive number;
 } type_data;
@@ -30,10 +30,10 @@ struct type {
 	type_data data;
 };
 
-type *new_declared(node *declared);
+type *new_declared(struct node *declared);
 type *new_int(int bytes);
 type *new_float(int bytes);
 type *new_byte();
 type *new_pointer(type *wrapped);
 type *new_array(type *array);
-bool equal(type *t1, *type t2);
+bool equal(type *t1, type *t2);

@@ -1,5 +1,5 @@
 #include "type.h"
-
+#include "node.h"
 #include <stdlib.h>
 
 type *new_declared(node *declared) {
@@ -45,7 +45,7 @@ type *new_array(type *array) {
     type *t = malloc(sizeof(type));
     t->type = MODIFIER;
     t->data.modified.type = ARRAY;
-    t->data.modified.modified = wrapped;
+    t->data.modified.modified = array;
     return t;
 }
 
@@ -56,8 +56,9 @@ bool equal(type *t1, type *t2) {
         return t1->data.modified.type == t2->data.modified.type
             && equal(t1->data.modified.modified, t2->data.modified.modified);
     case DECLARATION:
-        return t1->data.declared == t2.data.declared;
+        return t1->data.declared == t2->data.declared;
     case NUMBER:
         return t1->data.number.type == t2->data.number.type && t1->data.number.bytes == t2->data.number.bytes;
     }
+    return false;
 }
