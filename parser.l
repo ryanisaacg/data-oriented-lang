@@ -3,6 +3,7 @@
 	#include "yacc.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
+	#include <string.h>
 %}
 
 %option yylineno
@@ -18,16 +19,7 @@
 "export" { return EXPORT_TOKEN; }
 "import" { return IMPORT_TOKEN; }
 "var" { return VAR_TOKEN; }
-"true" { return TRUE_TOKEN; }
-"false" { return FALSE_TOKEN; }
-[A-Za-z_]+[A-Za-z0-9_]* { 
-	char *text = strdup(yytext); 
-	int len = strlen(text);
-	char last = text[len - 1];
-	if(!(last >= 'A' && last <= 'Z' || last >= 'a' && last <= 'z' || last >= '0' && last <= '9' || last == '_'))
-		text[len - 1] = '\0';
-	yylval.sval = text; 
-	return WORD;}
+[A-Za-z_]+[A-Za-z0-9_]* { yylval.sval = yytext; return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }
 [ \t] {}
 "#".*"\n" {} /*Comments*/
