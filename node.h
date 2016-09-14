@@ -1,5 +1,7 @@
 #pragma once
 
+#include "type.h"
+
 struct node;
 typedef struct node node;
 
@@ -34,6 +36,7 @@ struct node {
 		int integer;
 	} data;
 	node_type type;
+	type *semantic_type;
 };
 
 node *new_binary_node(node_type type, node *left, node *right);
