@@ -6,20 +6,23 @@ clean:
 	rm -r build
 	rm lex.c yacc.tab.c
 
-build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o
-	gcc build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o -o build/parser.out
+build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o
+	gcc build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o -o build/parser.out
 
-build/analyzer.o: analyzer.h analyzer.c build/table.o build/node.o
+build/analyzer.o: analyzer.h analyzer.c build/table.o build/node.o build/type.o
 	gcc $(C_FLAGS) analyzer.c -c -o build/analyzer.o
-	
-build/table.o: table.h table.c
-	gcc $(C_FLAGS) table.c -c -o build/table.o
-	
+
+build/node.o: node.c node.h build/type.o
+	gcc $(C_FLAGS) node.c -c -o build/node.o
+
 build/printing.o: printing.h printing.c build/node.o
 	gcc $(C_FLAGS) printing.c -c -o build/printing.o
 
-build/node.o: node.c node.h 
-	gcc $(C_FLAGS) node.c -c -o build/node.o
+build/table.o: table.h table.c
+	gcc $(C_FLAGS) table.c -c -o build/table.o
+
+build/type.o: type.h type.c
+	gcc $(C_FLAGS) type.c -c -o build/type.o
 
 build/yacc.o: yacc.tab.c
 	gcc -I. -Wno-implicit-function-declaration yacc.tab.c -c -o build/yacc.o
@@ -29,7 +32,7 @@ build/lex.o: yacc.tab.c lex.c
 
 lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
-	
+
 yacc.tab.c: parser.y
 	bison -d -byacc parser.y -v
 
