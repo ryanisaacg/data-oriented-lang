@@ -3,9 +3,9 @@
 #include "node.h"
 #include "table.h"
 
-static void analyze_node(node *current, symbol_table *types, symbol_table *values);
+static c_ast_node analyze_node(node *current, symbol_table *types, symbol_table *values);
 
-void analyze(rootnode root) {
+c_ast_node analyze(rootnode root) {
 	symbol_table *types = new_root_table();
 	symbol_table *values = new_root_table();
 	listnode struct_list = root.struct_list->data.list;
@@ -19,15 +19,19 @@ void analyze(rootnode root) {
 		node *name = func_list.data[i].data.func.name;
 		table_insert(values, name->data.string, func_list[i]);
 	}
+	c_ast_node c_root = new_c_node(ROOT, "", func_list.length + 1);
 	for(int i = 0; i < func_list.length; i++) {
-		analyze_node(func, types, values);
+		add_c_child(&root, analyze_node(func, types, values));
 	node *main = new_list_node(main_list.length);
 	for(int i = 0; i < main_list.length; i++) {
 		add_to_list(main, main_list.data[i]);
 	}
-	analyze_node(main, types, values);
+	add_child(&root, analyze_node(main, types, values));
+	return root;
 }
 
-static void analyze_node(node *current, symbol_table *types, symbol_table *values) {
+static c_ast_node analyze_node(node *current, symbol_table *types, symbol_table *values) {
+	switch(current->type) {
 	
+	}
 }
