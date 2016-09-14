@@ -38,8 +38,8 @@ node *table_get(table *tbl, char *name) {
 			return entry.declaration;
 		}
 	}
-	if(parent != NULL) {
-		return table_get(parent, name);
+	if(tbl->parent != NULL) {
+		return table_get(tbl->parent, name);
 	} else {
 		return NULL;
 	}
