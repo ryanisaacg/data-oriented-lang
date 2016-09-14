@@ -23,18 +23,16 @@ typedef struct { node *data; int length, capacity; } listnode;
 typedef struct { node *name, *return_type, *params, *body; } funcnode;
 typedef struct { node *struct_list, *func_list, *main_list, *ext_list; } rootnode;
 
-typedef union node_data {
-	node *unary;
-	node *binary[2];
-	rootnode root;
-	listnode list;
-	funcnode func;
-	char *string;
-	int integer;
-} node_data;
-
 struct node {
-	node_data data;
+	union {
+		node *unary;
+		node *binary[2];
+		rootnode root;
+		listnode list;
+		funcnode func;
+		char *string;
+		int integer;
+	} data;
 	node_type type;
 };
 
