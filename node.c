@@ -2,24 +2,27 @@
 
 #include <stdlib.h>
 
-node *new_binary_node(node_type type, node *left, node *right) {
+node *new_node(node_type type) {
 	node *new = malloc(sizeof(node));
 	new->type = type;
+	new->semantic_type = NULL;
+}
+
+node *new_binary_node(node_type type, node *left, node *right) {
+	node *new = new_node(type);
 	new->data.binary[0] = left;
 	new->data.binary[1] = right;
 	return new;
 }
 
 node *new_unary_node(node_type type, node *operand) {
-	node *expr = malloc(sizeof(node));
-	expr->type = type;
+	node *expr = new_node(type);
 	expr->data.unary = operand;
 	return expr;
 }
 
 node *new_list_node(int initial_size) {
-	node *new = malloc(sizeof(node));
-	new->type = LIST;
+	node *new = new_node(LIST);
 	new->data.list.data = malloc(sizeof(node) * initial_size);
 	new->data.list.capacity = initial_size;
 	new->data.list.length = 0;
