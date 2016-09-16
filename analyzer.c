@@ -86,9 +86,28 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return items;
 	}
 	case FUNCTION_DECLARATION: {
-		c_ast_node func = new_c_node("", 8);
-		add_c_child(analyze_node(current->data.func.return_type, types, values));
-		add_c_child(analyze_node(current->data.func.name, types, values));
+		c_ast_node func = new_c_node("", 7);
+		add_c_child(&func, analyze_node(current->data.func.return_type, types, values));
+		add_c_child(&func, analyze_node(current->data.func.name, types, values));
+		int length = current->data.func.params->data.list.length;
+		c_ast_node parameters = new_c_node("(", length * 3);
+		values = new_table(values);
+		for(int i = 0; i < length; i++) {
+			node **pair = current->data.func.params->data.list.data[i].data.binary;
+			node *left = pair[0];
+			node *right = pair[1];
+			table_insert(values, right->data.string, left);
+			add_c_child(&parameters, analyze_node(left, types, values));
+			add_c_child(&parameters, analyze_node(right, types, values));
+			if(i < length - 1) {
+				add_c_child(&parameters, new_c_node(",", 0));
+			}
+		}
+		add_c_child(&func, parameters);
+		add_c_child(&func, new_c_node("){", 0));
+		add_c_child(&func, analyze_node(current->data.func.body, types, values));
+		add_c_child(&func, new_c_node("}", 0));
+		return func;
 	}
 	default:
 		printf("Unexpected node type in semantic analysis");
