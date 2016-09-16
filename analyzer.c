@@ -85,6 +85,11 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		}
 		return items;
 	}
+	case FUNCTION_DECLARATION: {
+		c_ast_node func = new_c_node("", 8);
+		add_c_child(analyze_node(current->data.func.return_type, types, values));
+		add_c_child(analyze_node(current->data.func.name, types, values));
+	}
 	default:
 		printf("Unexpected node type in semantic analysis");
 		return new_c_node("", 0);
