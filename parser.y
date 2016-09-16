@@ -183,6 +183,5 @@ int main(void) {
 	c_write(out, result);
 	fclose(out);
 	print_expression(&root);
-	fclose(input);
 	return 0;
 }
