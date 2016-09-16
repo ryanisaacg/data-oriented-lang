@@ -6,6 +6,7 @@ node *new_node(node_type type) {
 	node *new = malloc(sizeof(node));
 	new->type = type;
 	new->semantic_type = NULL;
+	return new;
 }
 
 node *new_binary_node(node_type type, node *left, node *right) {

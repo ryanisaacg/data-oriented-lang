@@ -1,18 +1,1 @@
-export length
-
-type Point struct
-	int x 
-	int y
-end
-
-func length (Point point) float
-	return (point.y ^ 2 + point.x ^ 2) ^ (1/2)
-end
-
-var [Point] list
-if true
-	list = [Point{0, 0}, Point{5, 5}, Point{1, 4}, Point{4, 8}]
-end
-var [float] lengths = map(length, list)
-foreach(print, lengths) #0, 7.07106781186548, 4.12310562561766, 8.94427190999916
-	
+var int a = 5

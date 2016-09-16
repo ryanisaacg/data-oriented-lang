@@ -6,8 +6,8 @@ clean:
 	rm -r build
 	rm lex.c yacc.tab.c
 
-build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o
-	gcc build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o -o build/parser.out
+build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o
+	gcc build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o -o build/parser.out
 
 build/analyzer.o: analyzer.h analyzer.c build/table.o build/node.o build/type.o
 	gcc $(C_FLAGS) analyzer.c -c -o build/analyzer.o
@@ -23,6 +23,9 @@ build/table.o: table.h table.c
 
 build/type.o: type.h type.c
 	gcc $(C_FLAGS) type.c -c -o build/type.o
+	
+build/output.o: output.h output.c
+	gcc $(C_FLAGS) output.c -c -o build/output.o
 
 build/yacc.o: yacc.tab.c
 	gcc -I. -Wno-implicit-function-declaration yacc.tab.c -c -o build/yacc.o

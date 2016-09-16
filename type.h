@@ -7,7 +7,7 @@ struct node;
 struct type;
 typedef struct type type;
 
-typedef enum {FLOAT, INT, BYTE} numeric_type;
+typedef enum {FLOAT, INT_TYPE, BYTE} numeric_type;
 
 typedef struct {
 	numeric_type type;

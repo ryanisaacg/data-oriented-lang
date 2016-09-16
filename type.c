@@ -12,7 +12,7 @@ type *new_declared(node *declared) {
 type *new_int(int bytes) {
     type *t = malloc(sizeof(type));
     t->type = NUMBER;
-    t->data.number.type = INT;
+    t->data.number.type = INT_TYPE;
     t->data.number.bytes = bytes;
     return t;
 }
