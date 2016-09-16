@@ -10,3 +10,8 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Instant symbol table insertion while parsing
 [ ] Improved error messages
 [ ] Add line number to nodes
+[ ] Error module
+[ ] Else
+[ ] Else if
+[ ] Equality / comparison module
+[ ] Name mangling
