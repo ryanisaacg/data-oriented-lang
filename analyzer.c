@@ -7,6 +7,8 @@
 #include "table.h"
 
 static c_ast_node analyze_node(node *current, table *types, table *values);
+static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values);
+static c_ast_node binary_operator(char *c_version, node *operator, type returned, table *types, table *values);
 
 c_ast_node analyze(rootnode root) {
 	table *types = new_root_table();
@@ -39,6 +41,12 @@ c_ast_node analyze(rootnode root) {
 
 static c_ast_node analyze_node(node *current, table *types, table *values) {
 	switch(current->type) {
+	case OP_ADD:
+		return binary_operator_left_typed("+", current, types, values);
+	case OP_SUB:
+		return binary_operator_left_typed("-", current, types, values);
+	case OP_MULT:
+		return binary_operator_left_typed("*", current, types, values);
 	case NAME:
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);
@@ -69,7 +77,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 			add_c_child(&declarations, type);
 			node *declared = &(current->data.binary[1]->data.list.data[i]);
 			if(declared->type == OP_ASSIGN)
-				table_insert(values, declared->data.binary[0]->data.string, current->data.binary[0]); 
+				table_insert(values, declared->data.binary[0]->data.string, current->data.binary[0]);
 			else
 				table_insert(values, declared->data.string, current->data.binary[0]);
 			add_c_child(&declarations, analyze_node(declared, types, values));
@@ -109,9 +117,29 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		add_c_child(&func, new_c_node("}", 0));
 		return func;
 	}
+	case RETURN: {
+		c_ast_node returned = new_c_node("return", 1);
+		add_c_child(&returned, analyze_node(returned->data.unary, types, values));
+		return returned;
+	}
 	default:
 		printf("Unexpected node type in semantic analysis");
 		return new_c_node("", 0);
 		break;
 	}
+}
+
+static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values) {
+	c_ast_node node = binary_operator(c_version, operator, new_declared(NULL), types, values);
+	operator->semantic_type = operator->data.binary[0].semantic_type;
+	return node;
+}
+
+static c_ast_node binary_operator(char *c_version, node *operator, type returned, table *types, table *values) {
+	c_ast_node op = new_c_node("", 3);
+	add_c_child(&op, analyze_node(operator->data.binary[0], types, values));
+	add_c_child(&op, new_c_node(c_version, 0));
+	add_c_child(&op, analyze_node(operator->data.binary[1], types, values));
+	operator->semantic_type = returned;
+	return op;
 }
