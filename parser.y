@@ -179,7 +179,7 @@ int main(void) {
 	yyparse(&root);
 	fclose(input);
 	c_ast_node result = analyze(root.data.root);
-	FILE *out = fopen("output.c", "w");
+	FILE *out = fopen("build/output.c", "w");
 	c_write(out, result);
 	fclose(out);
 	print_expression(&root);
