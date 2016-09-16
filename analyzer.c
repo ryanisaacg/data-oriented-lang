@@ -22,7 +22,7 @@ c_ast_node analyze(rootnode root) {
 		node *name = func_list.data[i].data.func.name;
 		table_insert(values, name->data.string, func_list.data + i);
 	}
-	c_ast_node c_root = new_c_node( "", func_list.length + 1);
+	c_ast_node c_root = new_c_node( "", func_list.length + 3);
 	for(int i = 0; i < func_list.length; i++) {
 		add_c_child(&c_root, analyze_node(func_list.data + i, types, values));
 	}
@@ -31,7 +31,9 @@ c_ast_node analyze(rootnode root) {
 		add_to_list(m, main_list.data + i);
 	}
 	analyze_node(m, types, values);
+	add_c_child(&c_root, new_c_node("int main() {", 0));
 	add_c_child(&c_root, analyze_node(m, types, values));
+	add_c_child(&c_root, new_c_node("}", 0));
 	return c_root;
 }
 
