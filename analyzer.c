@@ -1,6 +1,7 @@
 #include "analyzer.h"
 
 #include "node.h"
+#include "printing.h"
 #include <stdlib.h>
 #include "table.h"
 
@@ -71,6 +72,14 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 			add_c_child(&declarations, new_c_node(";", 0));
 		}
 		return declarations;
+	}
+	case LIST: {
+		int len = current->data.list.length;
+		c_ast_node items = new_c_node("", len);
+		for(int i = 0; i < len; i++) {
+			add_c_child(&items, analyze_node(&(current->data.list.data[i]), types, values));
+		}
+		return items;
 	}
 	default:
 		printf("Unexpected node type in semantic analysis");
