@@ -59,6 +59,18 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 	case TYPE:
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);
+	case FUNC_CALL: {
+		char *name = current->data.binary[0]->data.string;
+		current->semantic_type = new_declared(table_get(values, name));
+		listnode list = current->data.binary[1]->data.list;
+		c_ast_node call = new_c_node(name, 2 + list.length);
+		add_c_child(&call, new_c_node("(", 0));
+		for(int i = 0; i < list.length; i++) {
+			add_c_child(&call, analyze_node(&(list.data[i]), types, values));
+		}
+		add_c_child(&call, new_c_node(")", 0));
+		return call;
+	}
 	case OP_ASSIGN: {
 		c_ast_node name = analyze_node(current->data.binary[0], types, values);
 		c_ast_node value = analyze_node(current->data.binary[1], types, values);
