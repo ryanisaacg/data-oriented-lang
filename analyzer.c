@@ -2,6 +2,7 @@
 
 #include "node.h"
 #include "printing.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include "table.h"
 
@@ -43,6 +44,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		//TODO: THIS IS DEFINITELY NOT A GOOD ASSUMTPION
 		current->semantic_type = new_int(4);
 		char *string = malloc(sizeof(char) * 10); //ALSO NOT A GOOD ASSUMPTION
+		sprintf(string, "%d", current->data.integer);
 		return new_c_node(string, 0);
 	case TYPE:
 		current->semantic_type = new_declared(table_get(values, current->data.string));
