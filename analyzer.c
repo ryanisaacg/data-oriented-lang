@@ -8,7 +8,7 @@
 
 static c_ast_node analyze_node(node *current, table *types, table *values);
 static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values);
-static c_ast_node binary_operator(char *c_version, node *operator, type returned, table *types, table *values);
+static c_ast_node binary_operator(char *c_version, node *operator, type *returned, table *types, table *values);
 
 c_ast_node analyze(rootnode root) {
 	table *types = new_root_table();
@@ -119,7 +119,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 	}
 	case RETURN: {
 		c_ast_node returned = new_c_node("return", 1);
-		add_c_child(&returned, analyze_node(returned->data.unary, types, values));
+		add_c_child(&returned, analyze_node(current->data.unary, types, values));
 		return returned;
 	}
 	default:
@@ -131,11 +131,11 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 
 static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values) {
 	c_ast_node node = binary_operator(c_version, operator, new_declared(NULL), types, values);
-	operator->semantic_type = operator->data.binary[0].semantic_type;
+	operator->semantic_type = operator->data.binary[0]->semantic_type;
 	return node;
 }
 
-static c_ast_node binary_operator(char *c_version, node *operator, type returned, table *types, table *values) {
+static c_ast_node binary_operator(char *c_version, node *operator, type *returned, table *types, table *values) {
 	c_ast_node op = new_c_node("", 3);
 	add_c_child(&op, analyze_node(operator->data.binary[0], types, values));
 	add_c_child(&op, new_c_node(c_version, 0));
