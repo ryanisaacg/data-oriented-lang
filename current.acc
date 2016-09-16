@@ -1,1 +1,5 @@
-var int a = 5, b, c, d
+func add(int a, int b) int
+    return a + b
+end
+
+return add(1, 5)
