@@ -9,6 +9,7 @@
 static c_ast_node analyze_node(node *current, table *types, table *values);
 static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values);
 static c_ast_node binary_operator(char *c_version, node *operator, type *returned, table *types, table *values);
+static c_ast_node analyze_block(node *list, table *types, table *values);
 
 c_ast_node analyze(rootnode root) {
 	table *types = new_root_table();
@@ -34,7 +35,7 @@ c_ast_node analyze(rootnode root) {
 	}
 	analyze_node(m, types, values);
 	add_c_child(&c_root, new_c_node("int main() {", 0));
-	add_c_child(&c_root, analyze_node(m, types, values));
+	add_c_child(&c_root, analyze_block(m, types, values));
 	add_c_child(&c_root, new_c_node("}", 0));
 	return c_root;
 }
@@ -63,10 +64,12 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		char *name = current->data.binary[0]->data.string;
 		current->semantic_type = new_declared(table_get(values, name));
 		listnode list = current->data.binary[1]->data.list;
-		c_ast_node call = new_c_node(name, 2 + list.length);
+		c_ast_node call = new_c_node(name, 2 + list.length * 2 - 1);
 		add_c_child(&call, new_c_node("(", 0));
 		for(int i = 0; i < list.length; i++) {
 			add_c_child(&call, analyze_node(&(list.data[i]), types, values));
+			if(i < list.length - 1)
+				add_c_child(&call, new_c_node(",", 0));
 		}
 		add_c_child(&call, new_c_node(")", 0));
 		return call;
@@ -125,7 +128,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		}
 		add_c_child(&func, parameters);
 		add_c_child(&func, new_c_node("){", 0));
-		add_c_child(&func, analyze_node(current->data.func.body, types, values));
+		add_c_child(&func, analyze_block(current->data.func.body, types, values));
 		add_c_child(&func, new_c_node("}", 0));
 		return func;
 	}
@@ -154,4 +157,14 @@ static c_ast_node binary_operator(char *c_version, node *operator, type *returne
 	add_c_child(&op, analyze_node(operator->data.binary[1], types, values));
 	operator->semantic_type = returned;
 	return op;
+}
+
+static c_ast_node analyze_block(node *lists, table *types, table *values) {
+	listnode list = lists->data.list;
+	c_ast_node items = new_c_node("", list.length * 2);
+	for(int i = 0; i < list.length; i++) {
+		add_c_child(&items, analyze_node(&(list.data[i]), types, values));
+		add_c_child(&items, new_c_node(";", 0));
+	}
+	return items;
 }
