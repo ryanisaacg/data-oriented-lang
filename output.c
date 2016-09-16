@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void c_write(FILE* stream, c_ast_node node) {
-	fprintf(stream, "%s", node.data);
+	fprintf(stream, "%s ", node.data);
 	for(int i = 0; i < node.length; i++) {
 		c_write(stream, node.list[i]);
 	}
