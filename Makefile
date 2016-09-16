@@ -2,6 +2,11 @@ C_FLAGS=-Wall -Werror -Wextra -Wfatal-errors -pedantic -std=c99 -Wno-unused-func
 L_FLAGS=
 all: build/parser.out
 
+run: all
+	build/./parser.out
+	gcc build/output.c -o build/output.out
+	build/./output.out
+
 clean:
 	rm -r build
 	rm lex.c yacc.tab.c
@@ -23,7 +28,7 @@ build/table.o: table.h table.c
 
 build/type.o: type.h type.c
 	gcc $(C_FLAGS) type.c -c -o build/type.o
-	
+
 build/output.o: output.h output.c
 	gcc $(C_FLAGS) output.c -c -o build/output.o
 
