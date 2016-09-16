@@ -6,7 +6,7 @@ This language is designed around arrays and data contiguity, which is very impor
 ##TODO
 
 [x] Fix dot operator bug
-[ ] Integer to string function
+[x] Integer to string function
 [ ] Instant symbol table insertion while parsing
 [ ] Improved error messages
 [ ] Add line number to nodes
