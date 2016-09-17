@@ -209,6 +209,12 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case OP_ASSIGN:
 	case OP_INIT:
 	case OP_MEMBER:
+	case OP_EQUAL:
+	case OP_NOT_EQUAL:
+	case OP_GREATER:
+	case OP_LESS:
+	case OP_LESS_EQUAL:
+	case OP_GREATER_EQUAL:
 	case TYPE_LITERAL:
 	case STRUCT_MEMBER:
 	case STRUCT_DELARATION:
