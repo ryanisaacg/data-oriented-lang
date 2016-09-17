@@ -171,6 +171,9 @@ static char *statement_to_string(node_type type) {
 		case IMPORT:
 			return "IMPORT";
 		break;
+		case C_EXTERN:
+			return "C EXTERNAL";
+		break;
 		case ARRAY_OF:
 			return "ARRAY";
 		break;
@@ -196,6 +199,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case RETURN:
 	case EXPORT:
 	case IMPORT:
+	case C_EXTERN:
 	case ARRAY_OF:
 	case ARRAY_LITERAL:
 		print_expression_tabbed(expr->data.unary, tab + 1);
@@ -261,7 +265,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 		break;
 	}
 }
-		
+
 
 
 void print_expression(node *expr) {

@@ -27,14 +27,15 @@
 "!=" { return NEQ_TOKEN; }
 "<=" { return LEQ_TOKEN; }
 ">=" { return GEQ_TOKEN; }
+"cextern" { return CEXTERN_TOKEN; }
 
-[A-Za-z_]+[A-Za-z0-9_]* { 
-	char *text = strdup(yytext); 
+[A-Za-z_]+[A-Za-z0-9_]* {
+	char *text = strdup(yytext);
 	int len = strlen(text);
 	char last = text[len - 1];
 	if(!(last >= 'A' && last <= 'Z' || last >= 'a' && last <= 'z' || last >= '0' && last <= '9' || last == '_'))
 		text[len - 1] = '\0';
-	yylval.sval = text; 
+	yylval.sval = text;
 	return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }
 [ \t] {}
