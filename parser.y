@@ -21,6 +21,7 @@
 
 //Values
 %token <sval> WORD
+%token <sval> STRING_TOKEN
 %token <ival> INT
 //Special placeholders
 %token WHITESPACE
@@ -82,6 +83,7 @@ expression:
 	name
 	| number
 	| boolean
+	| string
 	| '(' expression ')' {
 		$<nval>$ = $<nval>2; }
 	| expression '+' expression { $<nval>$ = new_binary_node(OP_ADD, $<nval>1, $<nval>3); }
@@ -177,6 +179,13 @@ number:
 		expr->type = NUM;
 		expr->data.integer = $1;
 		$<nval>$ = expr; }
+string:
+	STRING_TOKEN {
+		node *expr = malloc(sizeof(node));
+		expr->type = STRING;
+		expr->data.string = $1;
+		$<nval>$ = expr;
+	}
 boolean:
 	TRUE_TOKEN {
 		node *expr = malloc(sizeof(node));

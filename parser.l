@@ -39,6 +39,7 @@
 	return WORD;}
 [0-9]+ { yylval.ival = atoi(yytext); return INT; }
 [ \t] {}
+["]([^"]|\\\")*["] { yylval.sval = strdup(yytext); return STRING_TOKEN; }
 "#".*"\n" {} /*Comments*/
 "\n" { return LINE_END; }
 "\r" {}
