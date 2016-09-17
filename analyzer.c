@@ -61,21 +61,18 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);
 	case IF: {
+		values = new_table(values);
+		c_ast_node header = analyze_node(current->data.ternary[0], types, values);
+		//TODO CHECK TYPES
+		c_ast_node body = analyze_block(current->data.ternary[1], types, values);
+		c_ast_node control;
 		if(current->data.ternary[2] == NULL) {
-			values = new_table(values);
-			c_ast_node header = analyze_node(current->data.ternary[0], types, values);
-			//TODO CHECK TYPES
-			c_ast_node body = analyze_block(current->data.ternary[1], types, values);
 			c_ast_node control = new_c_node("if(", 4);
 			add_c_child(&control, header);
 			add_c_child(&control, new_c_node("){", 0));
 			add_c_child(&control, body);
 			add_c_child(&control, new_c_node("}", 0));
 		} else {
-			values = new_table(values);
-			c_ast_node header = analyze_node(current->data.ternary[0], types, values);
-			//TODO CHECK TYPES
-			c_ast_node body = analyze_block(current->data.ternary[1], types, values);
 			c_ast_node elseclause = analyze_block(current->data.ternary[2], types, values);
 			c_ast_node control = new_c_node("if(", 6);
 			add_c_child(&control, header);
@@ -85,6 +82,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 			add_c_child(&control, elseclause);
 			add_c_child(&control, new_c_node("}", 0));
 		}
+		return control;
 	}
 	case WHILE: {
 		values = new_table(values);

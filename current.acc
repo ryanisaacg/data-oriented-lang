@@ -4,8 +4,6 @@ end
 
 if 0
     return add(1, 5)
-elseif 0
-	return add(1, 2)
 else
 	return add(0, 0)
 end
