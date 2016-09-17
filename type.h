@@ -26,10 +26,11 @@ typedef union {
 } type_data;
 
 struct type {
-	enum {DECLARATION, MODIFIER, NUMBER} type;
+	enum {DECLARATION, MODIFIER, NUMBER, C_BINDING} type;
 	type_data data;
 };
 
+type *c_binding();
 type *new_declared(struct node *declared);
 type *new_int(int bytes);
 type *new_float(int bytes);

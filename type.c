@@ -2,6 +2,12 @@
 #include "node.h"
 #include <stdlib.h>
 
+type *c_binding() {
+    type *t = malloc(sizeof(type));
+    t->type = C_BINDING;
+    return t;
+}
+
 type *new_declared(node *declared) {
     type *t = malloc(sizeof(type));
     t->type = DECLARATION;
