@@ -33,7 +33,7 @@ c_ast_node analyze(rootnode root) {
 	for(int i = 0; i < main_list.length; i++) {
 		add_to_list(m, main_list.data + i);
 	}
-	analyze_node(m, types, values);
+	analyze_block(m, types, values);
 	add_c_child(&c_root, new_c_node("int main() {", 0));
 	add_c_child(&c_root, analyze_block(m, types, values));
 	add_c_child(&c_root, new_c_node("}", 0));
@@ -79,14 +79,18 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		c_ast_node body = analyze_block(current->data.ternary[1], types, values);
 		c_ast_node control;
 		if(current->data.ternary[2] == NULL) {
-			c_ast_node control = new_c_node("if(", 4);
+			control = new_c_node("if(", 4);
 			add_c_child(&control, header);
 			add_c_child(&control, new_c_node("){", 0));
 			add_c_child(&control, body);
 			add_c_child(&control, new_c_node("}", 0));
 		} else {
-			c_ast_node elseclause = analyze_block(current->data.ternary[2], types, values);
-			c_ast_node control = new_c_node("if(", 6);
+			c_ast_node elseclause;
+			if(current->data.ternary[2]->type == LIST)
+				elseclause = analyze_block(current->data.ternary[2], types, values);
+			else
+				elseclause = analyze_node(current->data.ternary[2], types, values);
+			control = new_c_node("if(", 6);
 			add_c_child(&control, header);
 			add_c_child(&control, new_c_node("){", 0));
 			add_c_child(&control, body);
@@ -186,7 +190,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return returned;
 	}
 	default:
-		printf("Unexpected node type in semantic analysis");
+		printf("Unexpected node type in semantic analysis: %d", current->type);
 		return new_c_node("", 0);
 		break;
 	}
