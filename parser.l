@@ -15,6 +15,8 @@
 "end" { return END_TOKEN; }
 "if" { return IF_TOKEN; }
 "while" { return WHILE_TOKEN; }
+"else" { return ELSE_TOKEN; }
+"elseif" { return ELSE_IF_TOKEN; }
 "return" { return RETURN_TOKEN; }
 "export" { return EXPORT_TOKEN; }
 "import" { return IMPORT_TOKEN; }

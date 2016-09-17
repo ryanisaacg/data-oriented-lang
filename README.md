@@ -11,7 +11,8 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Improved error messages
 [ ] Add line number to nodes
 [ ] Error module
-[ ] Else
-[ ] Else if
+[x] Else
+[x] Else if
+[ ] Else parsing bug
 [ ] Equality / comparison module
 [ ] Name mangling

@@ -9,6 +9,14 @@ node *new_node(node_type type) {
 	return new;
 }
 
+node *new_ternary_node(node_type type, node *one, node *two, node *three) {
+	node *new = new_node(type);
+	new->data.ternary[0] = one;
+	new->data.ternary[1] = two;
+	new->data.ternary[2] = three;
+	return new;
+}
+
 node *new_binary_node(node_type type, node *left, node *right) {
 	node *new = new_node(type);
 	new->data.binary[0] = left;

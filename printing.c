@@ -213,10 +213,15 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case STRUCT_MEMBER:
 	case STRUCT_DELARATION:
 	case FUNC_CALL:
-	case IF:
 	case WHILE:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
+		break;
+	case IF:
+		print_expression_tabbed(expr->data.ternary[0], tab + 1);
+		print_expression_tabbed(expr->data.ternary[1], tab + 1);
+		if(expr->data.ternary[2] != NULL)
+			print_expression_tabbed(expr->data.ternary[2], tab + 1);
 		break;
 	case NUM:
 		printf("%d", expr->data.integer);

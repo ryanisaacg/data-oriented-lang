@@ -29,6 +29,7 @@ struct node {
 	union {
 		node *unary;
 		node *binary[2];
+		node *ternary[3];
 		rootnode root;
 		listnode list;
 		funcnode func;
@@ -40,6 +41,7 @@ struct node {
 };
 
 node *new_node(node_type type);
+node *new_ternary_node(node_type type, node *one, node *two, node *three);
 node *new_binary_node(node_type type, node *left, node *right);
 node *new_unary_node(node_type type, node *operand);
 node *new_list_node(int initial_size);
