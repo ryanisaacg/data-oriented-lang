@@ -130,13 +130,17 @@ statement:
 	| variable_declaration LINE_END
 	| RETURN_TOKEN expression LINE_END { $<nval>$ = new_unary_node(RETURN, $<nval>2); }
 //CONTROL STRUCTURES
-
+else_list:
+	ELSE_IF_TOKEN expression LINE_END block { $<nval>$ = new_ternary_node(IF, $<nval>2, $<nval>4, NULL); }
+	| else_list else_alone { $<nval>$->data.ternary[2] = $<nval>2; }
+	| else_list ELSE_IF_TOKEN expression LINE_END block { $<nval>$->data.ternary[2] = new_ternary_node(IF, $<nval>3, $<nval>5, NULL); }
 else_alone:
 	ELSE_TOKEN LINE_END block { $<nval>$ = $<nval>3; }
 control:
 	IF_TOKEN expression LINE_END block END_TOKEN  { $<nval>$ = new_ternary_node(IF, $<nval>2, $<nval>4, NULL); }
 	| WHILE_TOKEN expression LINE_END block END_TOKEN  { $<nval>$ = new_binary_node(WHILE, $<nval>2, $<nval>4);	}
 	| IF_TOKEN expression LINE_END block else_alone END_TOKEN { $<nval>$ = new_ternary_node(IF, $<nval>2, $<nval>4, $<nval>5); }
+	| IF_TOKEN expression LINE_END block else_list END_TOKEN { $<nval>$ = new_ternary_node(IF, $<nval>2, $<nval>4, $<nval>5); }
 //TYPES
 type:
 	WORD {
