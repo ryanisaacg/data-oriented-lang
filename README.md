@@ -13,6 +13,6 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Error module
 [x] Else
 [x] Else if
-[ ] Else parsing bug
+[x] Else parsing bug
 [ ] Equality / comparison module
 [ ] Name mangling
