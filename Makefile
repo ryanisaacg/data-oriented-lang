@@ -4,7 +4,7 @@ all: build/parser.out
 
 run: all
 	build/./parser.out
-	gcc build/output.c -o build/output.out
+	gcc build/output.c -fno-builtin -o build/output.out
 	build/./output.out
 
 clean:
