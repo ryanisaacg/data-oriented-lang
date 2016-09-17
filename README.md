@@ -16,3 +16,4 @@ This language is designed around arrays and data contiguity, which is very impor
 [x] Else parsing bug
 [ ] Equality / comparison module
 [ ] Name mangling
+[ ] Character array based structs
