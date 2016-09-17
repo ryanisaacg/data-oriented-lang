@@ -19,9 +19,11 @@ c_ast_node analyze(rootnode root) {
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
 	for(int i = 0; i < external_list.length; i++) {
-		node *current = external_list.data[i];
-		if(current->type == C_EXTERN) {
-			table_insert(values, current->data.binary[0]->data.string, c_binding());
+		node current = external_list.data[i];
+		if(current.type == C_EXTERN) {
+			node *n = malloc(sizeof(node));
+			n->semantic_type = c_binding();
+			table_insert(values, current.data.binary[0]->data.string, n);
 		}
 	}
 	for(int i = 0; i < struct_list.length; i++) {
