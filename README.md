@@ -18,3 +18,6 @@ This language is designed around arrays and data contiguity, which is very impor
 [x] Elseif weird addition bug
 [ ] Name mangling
 [ ] Character array based structs
+[ ] Pointers in the parser
+[ ] Heap allocation
+[ ] Dot operator conversion
