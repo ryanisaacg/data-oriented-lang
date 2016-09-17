@@ -23,6 +23,11 @@
 "var" { return VAR_TOKEN; }
 "true" { return TRUE_TOKEN; }
 "false" { return FALSE_TOKEN; }
+"==" { return EQ_TOKEN; }
+"!=" { return NEQ_TOKEN; }
+"<=" { return LEQ_TOKEN; }
+">=" { return GEQ_TOKEN; }
+
 [A-Za-z_]+[A-Za-z0-9_]* { 
 	char *text = strdup(yytext); 
 	int len = strlen(text);

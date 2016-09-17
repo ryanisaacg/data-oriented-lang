@@ -40,12 +40,17 @@
 %token VAR_TOKEN
 %token TRUE_TOKEN
 %token FALSE_TOKEN
+%token EQ_TOKEN
+%token NEQ_TOKEN
+%token GEQ_TOKEN
+%token LEQ_TOKEN
 
+%left EQ_TOKEN NEQ_TOKEN GEQ_TOKEN LEQ_TOKEN '<' '>'
 %left '='
 %left '+' '-' '%'
 %left '*' '/'
 %right '^'
-%nonassoc UMINUS
+%nonassoc UMINUS '!'
 %left '.'
 
 %parse-param {node *root_node}
@@ -85,6 +90,13 @@ expression:
 	| expression '%' expression { $<nval>$ = new_binary_node(OP_MOD, $<nval>1, $<nval>3); }
 	| expression '=' expression { $<nval>$ = new_binary_node(OP_ASSIGN, $<nval>1, $<nval>3); }
 	| expression '.' expression { $<nval>$ = new_binary_node(OP_MEMBER, $<nval>1, $<nval>3); }
+	| expression '>' expression { $<nval>$ = new_binary_node(OP_GREATER, $<nval>1, $<nval>3); }
+	| expression '<' expression { $<nval>$ = new_binary_node(OP_LESS, $<nval>1, $<nval>3); }
+	| expression '!' expression { $<nval>$ = new_binary_node(OP_BOOL_NOT, $<nval>1, $<nval>3); }
+	| expression EQ_TOKEN expression { $<nval>$ = new_binary_node(OP_EQUAL, $<nval>1, $<nval>3); }
+	| expression NEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_NOT_EQUAL, $<nval>1, $<nval>3); }
+	| expression GEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_GREATER_EQUAL, $<nval>1, $<nval>3); }
+	| expression LEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_LESS_EQUAL, $<nval>1, $<nval>3); }
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
