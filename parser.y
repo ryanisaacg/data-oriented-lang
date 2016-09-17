@@ -71,7 +71,7 @@ path:
 external:
 	EXPORT_TOKEN path { $<nval>$ = new_unary_node(EXPORT, $<nval>2); }
 	| IMPORT_TOKEN path { $<nval>$ = new_unary_node(IMPORT, $<nval>2); }
-	| CEXTERN_TOKEN name { $<nval>$ = new_unary_node(C_EXTERN< $<nval>2); }
+	| CEXTERN_TOKEN name { $<nval>$ = new_unary_node(C_EXTERN, $<nval>2); }
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); }
