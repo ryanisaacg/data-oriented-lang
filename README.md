@@ -16,6 +16,8 @@ This language is designed around arrays and data contiguity, which is very impor
 [x] Else parsing bug
 [x] Equality / comparison module
 [x] Elseif weird addition bug
+[ ] C function extern declarations
+[ ] C struct extern declarations
 [ ] Name mangling
 [ ] Character array based structs
 [ ] Pointers in the parser
