@@ -65,6 +65,8 @@ bool equal(type *t1, type *t2) {
         return t1->data.declared == t2->data.declared;
     case NUMBER:
         return t1->data.number.type == t2->data.number.type && t1->data.number.bytes == t2->data.number.bytes;
+    case C_BINDING:
+        return true;
     }
     return false;
 }
