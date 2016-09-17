@@ -48,6 +48,18 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return binary_operator_left_typed("-", current, types, values);
 	case OP_MULT:
 		return binary_operator_left_typed("*", current, types, values);
+	case OP_EQUAL:
+		return binary_operator("==", current, new_byte(), types, values);
+	case OP_NOT_EQUAL:
+		return binary_operator("!=", current, new_byte(), types, values);
+	case OP_GREATER:
+		return binary_operator(">", current, new_byte(), types, values);
+	case OP_LESS:
+		return binary_operator("<", current, new_byte(), types, values);
+	case OP_LESS_EQUAL:
+		return binary_operator("<=", current, new_byte(), types, values);
+	case OP_GREATER_EQUAL:
+		return binary_operator(">=", current, new_byte(), types, values);
 	case NAME:
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);

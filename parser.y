@@ -92,12 +92,12 @@ expression:
 	| expression '.' expression { $<nval>$ = new_binary_node(OP_MEMBER, $<nval>1, $<nval>3); }
 	| expression '>' expression { $<nval>$ = new_binary_node(OP_GREATER, $<nval>1, $<nval>3); }
 	| expression '<' expression { $<nval>$ = new_binary_node(OP_LESS, $<nval>1, $<nval>3); }
-	| expression '!' expression { $<nval>$ = new_binary_node(OP_BOOL_NOT, $<nval>1, $<nval>3); }
 	| expression EQ_TOKEN expression { $<nval>$ = new_binary_node(OP_EQUAL, $<nval>1, $<nval>3); }
 	| expression NEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_NOT_EQUAL, $<nval>1, $<nval>3); }
 	| expression GEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_GREATER_EQUAL, $<nval>1, $<nval>3); }
 	| expression LEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_LESS_EQUAL, $<nval>1, $<nval>3); }
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
+	| '!' expression %prec '!' { $<nval>$ = new_unary_node(OP_BOOL_NOT, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
 	| type '{' param_list '}' { $<nval>$ = new_binary_node(TYPE_LITERAL, $<nval>1, $<nval>3); }
@@ -200,6 +200,7 @@ int main(void) {
 	root.data.root.main_list = new_list_node(10);
 	yyparse(&root);
 	fclose(input);
+	print_expression(&root);
 	c_ast_node result = analyze(root.data.root);
 	FILE *out = fopen("build/output.c", "w");
 	c_write(out, result);
