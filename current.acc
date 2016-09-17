@@ -1,12 +1,18 @@
+cextern printf
+
+func print(int number) void
+    printf("%d\n", number)
+end
+
 func add(int a, int b) int
     return a + b
 end
 
 var int sum = add(1, 2)
 if sum == 1
-    return 1
+    print(1)
 elseif sum == 2
-	return 2
+	print(2)
 else
-	return sum
+	print(sum)
 end
