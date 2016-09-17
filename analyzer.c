@@ -69,6 +69,9 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return binary_operator("<=", current, new_byte(), types, values);
 	case OP_GREATER_EQUAL:
 		return binary_operator(">=", current, new_byte(), types, values);
+	case STRING:
+		current->semantic_type = new_array(new_byte());
+		return new_c_node(current->data.string, 0);
 	case NAME:
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);
