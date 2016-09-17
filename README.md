@@ -23,3 +23,7 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Pointers in the parser
 [ ] Heap allocation
 [ ] Dot operator conversion
+[ ] Pointers
+[ ] Type checking
+[ ] Prevent variable shadowing
+[ ] Global variable support?
