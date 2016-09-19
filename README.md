@@ -17,13 +17,15 @@ This language is designed around arrays and data contiguity, which is very impor
 [x] Equality / comparison module
 [x] Elseif weird addition bug
 [x] C function extern declarations
+[ ] The last statement in the main is not output
+[ ] C function extern return values
 [ ] C struct extern declarations
 [ ] C header imports
 [ ] Name mangling
 [ ] Character array based structs
 [ ] Heap allocation
 [ ] Dot operator conversion
-[ ] Pointers
+[x] Pointers
 [ ] Type checking
 [ ] Prevent variable shadowing
 [ ] Global variable support?

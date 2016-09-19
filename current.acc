@@ -13,11 +13,11 @@ func add(int a, int b) int
     return a + b
 end
 
-var int sum = add(1, 2)
-if sum == 1
-    print(1)
-elseif sum == 2
-	print(2)
-else
-	print(sum)
+func incr(@int a) void
+	$a = $a + 1
 end
+
+var int x = 5
+incr(@x)
+print(x)
+print(x)

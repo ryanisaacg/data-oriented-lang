@@ -90,15 +90,15 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 	case OP_DEREF: {
 		c_ast_node deref = new_c_node("*", 1);
 		node *operand = current->data.unary;
-		add_c_child(&deref, analyze_node(operand, types, values));)
+		add_c_child(&deref, analyze_node(operand, types, values));
 		current->semantic_type = new_pointer(operand->semantic_type);
 		return deref;
 	}
 	case OP_GETREF: {
 		c_ast_node deref = new_c_node("&", 1);
 		node *operand = current->data.unary;
-		add_c_child(&deref, analyze_node(operand, types, values));)
-		current->semantic_type = operand->semantic_type.data.modified.modified;
+		add_c_child(&deref, analyze_node(operand, types, values));
+		current->semantic_type = operand->semantic_type->data.modified.modified;
 		return deref;
 	}
 	case STRING:
@@ -248,6 +248,12 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		c_ast_node returned = new_c_node("return", 1);
 		add_c_child(&returned, analyze_node(current->data.unary, types, values));
 		return returned;
+	}
+	case POINTER_OF: {
+		c_ast_node dec = new_c_node("", 2);
+		add_c_child(&dec, analyze_node(current->data.unary, types, values));
+		add_c_child(&dec, new_c_node("*", 0));
+		return dec;
 	}
 	default:
 		printf("Unexpected node type in semantic analysis: %d", current->type);

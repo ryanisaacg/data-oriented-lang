@@ -19,6 +19,7 @@ void add_c_child(c_ast_node *parent, c_ast_node child) {
 		parent->length++;
 	} else {
 		parent->list = realloc(parent->list, parent->capacity + 10);
+		parent->capacity += 10;
 		add_c_child(parent, child);
 	}
 }
