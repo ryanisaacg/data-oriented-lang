@@ -18,7 +18,7 @@ c_ast_node analyze(rootnode root) {
 	listnode func_list = root.func_list->data.list;
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
-	c_ast_node c_root = new_c_node( "", func_list.length + 4);
+	c_ast_node c_root = new_c_node( "", func_list.length + 5);
 	c_ast_node externs = new_c_node( "", external_list.length / 2);
 	for(int i = 0; i < external_list.length; i++) {
 		node current = external_list.data[i];
@@ -34,10 +34,21 @@ c_ast_node analyze(rootnode root) {
 		}
 	}
 	add_c_child(&c_root, externs);
+	c_ast_node forward_decs = new_c_node("", struct_list.length);
 	for(int i = 0; i < struct_list.length; i++) {
 		node *name = struct_list.data[i].data.binary[0];
 		table_insert(types, name->data.string, struct_list.data + i);
+		c_ast_node namenode = new_c_node(name->data.string, 0);
+		c_ast_node semicolon = new_c_node(";", 0);
+		c_ast_node dec = new_c_node("struct", 5);
+		add_c_child(&dec, namenode);
+		add_c_child(&dec, semicolon);
+		add_c_child(&dec, new_c_node("typedef struct", 0));
+		add_c_child(&dec, namenode);
+		add_c_child(&dec, semicolon);
+		add_c_child(&forward_decs, dec);
 	}
+	add_c_child(&c_root, forward_decs);
 	for(int i = 0; i < func_list.length; i++) {
 		node *name = func_list.data[i].data.func.name;
 		table_insert(values, name->data.string, func_list.data + i);
@@ -192,6 +203,22 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 			add_c_child(&items, analyze_node(&(current->data.list.data[i]), types, values));
 		}
 		return items;
+	}
+	case STRUCT_DELARATION: {
+		c_ast_node name = analyze_node( current->data.binary[0], types, values);
+		listnode list = current->data.binary[1]->data.list;
+		c_ast_node declaration = new_c_node("struct", list.length + 3);
+		add_c_child(&declaration, name);
+		add_c_child(&declaration, "{");
+		for(int i = 0; i < list.length; i++) {
+			node pair = list.data[i];
+			c_ast_node pair = new_c_node(pair.binary[1]->data.string, 1);
+			add_c_child(&pair, analyze_node(pair.binary[0], types, values));
+			add_c_child(&declaration, pair);
+		}
+		table_insert(values, current->data.binary[0]->data.string, current);
+		add_c_child(&declaration, "};");
+		return declaration;
 	}
 	case FUNCTION_DECLARATION: {
 		c_ast_node func = new_c_node("", 7);

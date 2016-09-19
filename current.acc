@@ -1,5 +1,10 @@
 cextern printf
 
+type Point struct
+    int x
+    int y
+end
+
 func print(int number) void
     printf("%d\n", number)
 end
