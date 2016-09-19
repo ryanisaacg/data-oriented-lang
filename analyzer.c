@@ -18,7 +18,7 @@ c_ast_node analyze(rootnode root) {
 	listnode func_list = root.func_list->data.list;
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
-	c_ast_node c_root = new_c_node( "", func_list.length + 5);
+	c_ast_node c_root = new_c_node( "", func_list.length + 6);
 	c_ast_node externs = new_c_node( "", external_list.length / 2);
 	for(int i = 0; i < external_list.length; i++) {
 		node current = external_list.data[i];
@@ -35,6 +35,7 @@ c_ast_node analyze(rootnode root) {
 	}
 	add_c_child(&c_root, externs);
 	c_ast_node forward_decs = new_c_node("", struct_list.length);
+	c_ast_node struct_declarations = new_c_node("", struct_list.length);
 	for(int i = 0; i < struct_list.length; i++) {
 		node *name = struct_list.data[i].data.binary[0];
 		table_insert(types, name->data.string, struct_list.data + i);
@@ -48,8 +49,10 @@ c_ast_node analyze(rootnode root) {
 		add_c_child(&dec, namenode);
 		add_c_child(&dec, semicolon);
 		add_c_child(&forward_decs, dec);
+		add_c_child(&struct_declarations, analyze_node(struct_list.data + i, types, values));
 	}
 	add_c_child(&c_root, forward_decs);
+	add_c_child(&c_root, struct_declarations);
 	for(int i = 0; i < func_list.length; i++) {
 		node *name = func_list.data[i].data.func.name;
 		table_insert(values, name->data.string, func_list.data + i);
