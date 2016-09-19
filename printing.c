@@ -196,6 +196,8 @@ static void print_expression_tabbed(node *expr, int tab) {
 	printf("%s: ", statement_to_string(expr->type));
 	switch(expr->type) {
 	case OP_NEGATIVE:
+	case OP_DEREF:
+	case OP_GETREF:
 	case RETURN:
 	case EXPORT:
 	case IMPORT:

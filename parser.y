@@ -53,6 +53,7 @@
 %left '*' '/'
 %right '^'
 %nonassoc UMINUS '!'
+%nonassoc '$' '@'
 %left '.'
 
 %parse-param {node *root_node}
@@ -101,6 +102,8 @@ expression:
 	| expression LEQ_TOKEN expression { $<nval>$ = new_binary_node(OP_LESS_EQUAL, $<nval>1, $<nval>3); }
 	| '-' expression %prec UMINUS { $<nval>$ = new_unary_node(OP_NEGATIVE, $<nval>2); }
 	| '!' expression %prec '!' { $<nval>$ = new_unary_node(OP_BOOL_NOT, $<nval>2); }
+	| '$' expression { $<nval>$ = new_unary_node(OP_DEREF, $<nval>2); }
+	| '@' expression { $<nval>$ = new_unary_node(OP_GETREF, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
 	| type '{' param_list '}' { $<nval>$ = new_binary_node(TYPE_LITERAL, $<nval>1, $<nval>3); }
