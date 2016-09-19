@@ -76,6 +76,20 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return binary_operator("<=", current, new_byte(), types, values);
 	case OP_GREATER_EQUAL:
 		return binary_operator(">=", current, new_byte(), types, values);
+	case OP_DEREF: {
+		c_ast_node deref = new_c_node("*", 1);
+		node *operand = current->data.unary;
+		add_c_child(&deref, analyze_node(operand, types, values));)
+		current->semantic_type = new_pointer(operand->semantic_type);
+		return deref;
+	}
+	case OP_GETREF: {
+		c_ast_node deref = new_c_node("&", 1);
+		node *operand = current->data.unary;
+		add_c_child(&deref, analyze_node(operand, types, values));)
+		current->semantic_type = operand->semantic_type.data.modified.modified;
+		return deref;
+	}
 	case STRING:
 		current->semantic_type = new_array(new_byte());
 		return new_c_node(current->data.string, 0);
