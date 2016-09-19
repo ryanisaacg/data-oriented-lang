@@ -203,6 +203,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case IMPORT:
 	case C_EXTERN:
 	case ARRAY_OF:
+	case POINTER_OF:
 	case ARRAY_LITERAL:
 		print_expression_tabbed(expr->data.unary, tab + 1);
 		break;
