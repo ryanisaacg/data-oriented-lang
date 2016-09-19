@@ -209,15 +209,15 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		listnode list = current->data.binary[1]->data.list;
 		c_ast_node declaration = new_c_node("struct", list.length + 3);
 		add_c_child(&declaration, name);
-		add_c_child(&declaration, "{");
+		add_c_child(&declaration, new_c_node("{", 0));
 		for(int i = 0; i < list.length; i++) {
-			node pair = list.data[i];
-			c_ast_node pair = new_c_node(pair.binary[1]->data.string, 1);
-			add_c_child(&pair, analyze_node(pair.binary[0], types, values));
+			node pair_node = list.data[i];
+			c_ast_node pair = new_c_node(pair_node.data.binary[1]->data.string, 1);
+			add_c_child(&pair, analyze_node(pair_node.data.binary[0], types, values));
 			add_c_child(&declaration, pair);
 		}
 		table_insert(values, current->data.binary[0]->data.string, current);
-		add_c_child(&declaration, "};");
+		add_c_child(&declaration, new_c_node("};", 0));
 		return declaration;
 	}
 	case FUNCTION_DECLARATION: {
