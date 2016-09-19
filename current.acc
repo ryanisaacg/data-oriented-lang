@@ -9,9 +9,10 @@ func add(int a, int b) int
 end
 
 func incr(@int a) void
-	$a = a + 1
+	$a = $a + 1
 end
 
 var int x = 5
 incr(@x)
+print(x)
 print(x)

@@ -222,6 +222,12 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		add_c_child(&returned, analyze_node(current->data.unary, types, values));
 		return returned;
 	}
+	case POINTER_OF: {
+		c_ast_node dec = new_c_node("", 2);
+		add_c_child(&dec, analyze_node(current->data.unary, types, values));
+		add_c_child(&dec, new_c_node("*", 0));
+		return dec;
+	}
 	default:
 		printf("Unexpected node type in semantic analysis: %d", current->type);
 		return new_c_node("", 0);
