@@ -40,10 +40,11 @@ c_ast_node analyze(rootnode root) {
 		table_insert(types, name->data.string, struct_list.data + i);
 		c_ast_node namenode = new_c_node(name->data.string, 0);
 		c_ast_node semicolon = new_c_node(";", 0);
-		c_ast_node dec = new_c_node("struct", 5);
+		c_ast_node dec = new_c_node("struct", 6);
 		add_c_child(&dec, namenode);
 		add_c_child(&dec, semicolon);
 		add_c_child(&dec, new_c_node("typedef struct", 0));
+		add_c_child(&dec, namenode);
 		add_c_child(&dec, namenode);
 		add_c_child(&dec, semicolon);
 		add_c_child(&forward_decs, dec);
