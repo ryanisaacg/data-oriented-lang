@@ -18,14 +18,22 @@ c_ast_node analyze(rootnode root) {
 	listnode func_list = root.func_list->data.list;
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
+	c_ast_node c_root = new_c_node( "", func_list.length + 4);
+	c_ast_node externs = new_c_node( "", external_list.length / 2);
 	for(int i = 0; i < external_list.length; i++) {
 		node current = external_list.data[i];
 		if(current.type == C_EXTERN) {
 			node *n = malloc(sizeof(node));
+			char *name = current.data.binary[0]->data.string;
 			n->semantic_type = c_binding();
-			table_insert(values, current.data.binary[0]->data.string, n);
+			table_insert(values, name, n);
+			c_ast_node ext = new_c_node("extern", 2);
+			add_c_child(&ext, new_c_node(name, 0));
+			add_c_child(&ext, new_c_node("();", 0));
+			add_c_child(&externs, ext);
 		}
 	}
+	add_c_child(&c_root, externs);
 	for(int i = 0; i < struct_list.length; i++) {
 		node *name = struct_list.data[i].data.binary[0];
 		table_insert(types, name->data.string, struct_list.data + i);
@@ -34,7 +42,6 @@ c_ast_node analyze(rootnode root) {
 		node *name = func_list.data[i].data.func.name;
 		table_insert(values, name->data.string, func_list.data + i);
 	}
-	c_ast_node c_root = new_c_node( "", func_list.length + 3);
 	for(int i = 0; i < func_list.length; i++) {
 		add_c_child(&c_root, analyze_node(func_list.data + i, types, values));
 	}
