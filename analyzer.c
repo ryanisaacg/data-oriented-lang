@@ -216,9 +216,11 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		add_c_child(&declaration, new_c_node("{", 0));
 		for(int i = 0; i < list.length; i++) {
 			node pair_node = list.data[i];
-			c_ast_node pair = new_c_node(pair_node.data.binary[1]->data.string, 1);
-			add_c_child(&pair, analyze_node(pair_node.data.binary[0], types, values));
-			add_c_child(&declaration, pair);
+			c_ast_node item = new_c_node("", 3);
+			add_c_child(&item, analyze_node(pair_node.data.binary[0], types, values));
+			add_c_child(&item, new_c_node(pair_node.data.binary[1]->data.string, 1));
+			add_c_child(&item, new_c_node(";", 0));
+			add_c_child(&declaration, item);
 		}
 		table_insert(values, current->data.binary[0]->data.string, current);
 		add_c_child(&declaration, new_c_node("};", 0));
