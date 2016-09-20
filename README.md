@@ -30,6 +30,7 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Type checking
 [ ] Prevent variable shadowing
 [ ] Global variable support?
+[ ] Imports for other clarke files
 [ ] Basic pattern matching
 [ ] Pure anonymous functions
 [ ] Clojure capturing

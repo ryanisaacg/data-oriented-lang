@@ -205,6 +205,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case ARRAY_OF:
 	case POINTER_OF:
 	case ARRAY_LITERAL:
+	case HEAP_INIT:
 		print_expression_tabbed(expr->data.unary, tab + 1);
 		break;
 	case OP_ADD:
