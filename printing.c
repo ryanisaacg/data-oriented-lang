@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "printing.h"
 
-static char *statement_to_string(node_type type) {
+char *statement_to_string(node_type type) {
 	switch(type) {
         case OP_ADD:
         	return "OP_ADD";

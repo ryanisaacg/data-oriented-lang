@@ -4,7 +4,9 @@
 #include "printing.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "table.h"
+#include "printing.h"
 
 static c_ast_node analyze_node(node *current, table *types, table *values);
 static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values);
@@ -262,7 +264,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return dec;
 	}
 	default:
-		printf("Unexpected node type in semantic analysis: %d", current->type);
+		printf("Unexpected node type in semantic analysis: %s\n", statement_to_string(current->type));
 		return new_c_node("", 0);
 		break;
 	}
