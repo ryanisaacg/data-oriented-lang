@@ -20,7 +20,7 @@ c_ast_node analyze(rootnode root) {
 	listnode func_list = root.func_list->data.list;
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
-	c_ast_node c_root = new_c_node( "", func_list.length + 6);
+	c_ast_node c_root = new_c_node( "extern void printf(); extern void *memcpy(); extern void *malloc();", func_list.length + 6);
 	c_ast_node externs = new_c_node( "", external_list.length / 2);
 	for(int i = 0; i < external_list.length; i++) {
 		node current = external_list.data[i];
@@ -131,6 +131,30 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		add_c_child(&deref, analyze_node(operand, types, values));
 		current->semantic_type = operand->semantic_type->data.modified.modified;
 		return deref;
+	}
+	case HEAP_INIT: {
+		node *operand = current->data.unary;
+		c_ast_node type, initializer;
+		if(operand->type == NUM) {
+			type = new_c_node("int", 0); //TODO: NOT ALL NUMBERS ARE INTS
+			initializer = new_c_node("(int){", 2);
+			add_c_child(&initializer, analyze_node(operand, types, values));
+			add_c_child(&initializer, new_c_node("}", 0));
+		} else if(operand->type == TYPE_LITERAL) {
+			type = analyze_node(operand->data.binary[0], types, values);
+			initializer = analyze_node(operand, types, values);
+		}
+		c_ast_node size = new_c_node("sizeof(", 2);
+		add_c_child(&size, type);
+		add_c_child(&size, new_c_node(")", 0));
+		c_ast_node output = new_c_node("memcpy(malloc(", 6);
+		add_c_child(&output, size);
+		add_c_child(&output, new_c_node("), &", 0));
+		add_c_child(&output, initializer);
+		add_c_child(&output, new_c_node(", ", 0));
+		add_c_child(&output, size);
+		add_c_child(&output, new_c_node(");", 0));
+		return output;
 	}
 	case STRING:
 		current->semantic_type = new_array(new_byte());

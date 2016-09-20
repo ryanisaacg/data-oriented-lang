@@ -23,7 +23,7 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] C header imports
 [ ] Name mangling
 [ ] Character array based structs
-[ ] Heap allocation
+[x] Heap allocation
 [x] Dot operator conversion
 [x] Pointers
 [x] Pointer with dot operator bug
