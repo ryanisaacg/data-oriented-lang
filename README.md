@@ -35,4 +35,4 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Pure anonymous functions
 [ ] Clojure capturing
 [x] Output struct literals
-[ ] Output binary without outputting C file
+[x] Output binary without outputting C file
