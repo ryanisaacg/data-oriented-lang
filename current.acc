@@ -23,5 +23,6 @@ p.y = 6
 var @Point q
 q = @p
 incr(@(q.x))
+incr(@(p.x))
 print(q.x)
 print(1)

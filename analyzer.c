@@ -106,7 +106,6 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 			declared = left_type->data.declared;
 			c_operator = ".";
 		}
-		declared = declared->semantic_type->data.declared;
 		char *name = current->data.binary[1]->data.string;
 		listnode list = declared->data.binary[1]->data.list;
 		for(int i = 0; i < list.length; i++) {
@@ -136,18 +135,24 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 	case STRING:
 		current->semantic_type = new_array(new_byte());
 		return new_c_node(current->data.string, 0);
-	case NAME:
-		current->semantic_type = new_declared(table_get(values, current->data.string));
+	case NAME: {
+		node *type_source = table_get(values, current->data.string);
+		if(type_source == NULL)
+			type_source = table_get(types, current->data.string);
+		if(type_source != NULL)
+			current->semantic_type = type_source->semantic_type;
 		return new_c_node(current->data.string, 0);
+	}
 	case NUM:
 		//TODO: THIS IS DEFINITELY NOT A GOOD ASSUMTPION
 		current->semantic_type = new_int(4);
 		char *string = malloc(sizeof(char) * 10); //ALSO NOT A GOOD ASSUMPTION
 		sprintf(string, "%d", current->data.integer);
 		return new_c_node(string, 0);
-	case TYPE:
+	case TYPE: {
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);
+	}
 	case IF: {
 		values = new_table(values);
 		c_ast_node header = analyze_node(current->data.ternary[0], types, values);
@@ -219,6 +224,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		for(int i = 0; i < len; i++) {
 			add_c_child(&declarations, type);
 			node *declared = &(current->data.binary[1]->data.list.data[i]);
+			declared->semantic_type = current->data.binary[0]->semantic_type;
 			if(declared->type == OP_ASSIGN)
 				table_insert(values, declared->data.binary[0]->data.string, current->data.binary[0]);
 			else
@@ -287,6 +293,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		c_ast_node dec = new_c_node("", 2);
 		add_c_child(&dec, analyze_node(current->data.unary, types, values));
 		add_c_child(&dec, new_c_node("*", 0));
+		current->semantic_type = new_pointer(current->data.unary->semantic_type);
 		return dec;
 	}
 	default:
