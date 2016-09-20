@@ -35,6 +35,9 @@ This language is designed around arrays and data contiguity, which is very impor
     * [x] Pointer with dot operator bug
 * [ ] Global variable support?
 * [ ] Imports for other clarke files
+    * [ ] Namespace name mangling (requires name mangling)
+    * [ ] Namespace operator
+    * [ ] Clarke standard library
 * [ ] Functional programming
     * [ ] Pure anonymous functions
     * [ ] Clojure capturing
