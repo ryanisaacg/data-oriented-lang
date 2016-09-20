@@ -17,4 +17,3 @@ end
 
 var @Point q = new Point{1, 6}
 print(q.x)
-print(1)
