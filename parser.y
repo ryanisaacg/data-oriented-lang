@@ -8,7 +8,6 @@
 	#include "analyzer.h"
 	#include "output.h"
 	#include "printing.h"
-	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
 	#include "yacc.tab.h"
@@ -203,6 +202,8 @@ boolean:
 		$<nval>$ = expr; }
 %%
 
+#include <stdio.h>
+
 extern FILE* yyin;
 
 int main(void) {
@@ -217,8 +218,8 @@ int main(void) {
 	yyparse(&root);
 	fclose(input);
 	c_ast_node result = analyze(root.data.root);
-	FILE *out = fopen("build/output.c", "w");
+	FILE *out = popen("gcc -fno-builtin -o build/output.out -xc -", "w");
 	c_write(out, result);
-	fclose(out);
+	pclose(out);
 	return 0;
 }
