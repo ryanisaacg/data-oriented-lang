@@ -214,7 +214,6 @@ int main(void) {
 	root.data.root.main_list = new_list_node(10);
 	yyparse(&root);
 	fclose(input);
-	print_expression(&root);
 	c_ast_node result = analyze(root.data.root);
 	FILE *out = fopen("build/output.c", "w");
 	c_write(out, result);
