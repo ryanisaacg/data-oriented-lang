@@ -219,6 +219,5 @@ int main(void) {
 	FILE *out = fopen("build/output.c", "w");
 	c_write(out, result);
 	fclose(out);
-	print_expression(&root);
 	return 0;
 }
