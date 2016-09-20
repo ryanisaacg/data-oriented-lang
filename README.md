@@ -26,7 +26,7 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Heap allocation
 [x] Dot operator conversion
 [x] Pointers
-[ ] Pointer with dot operator bug
+[x] Pointer with dot operator bug
 [ ] Type checking
 [ ] Prevent variable shadowing
 [ ] Global variable support?
