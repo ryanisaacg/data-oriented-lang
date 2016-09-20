@@ -17,7 +17,11 @@ func incr(@int a) void
 	$a = $a + 1
 end
 
-var int x = 5
-incr(@x)
-print(x)
-print(x)
+var Point p
+p.x = 1
+p.y = 6
+var @Point q
+q = @p
+incr(@(q.x))
+print(q.x)
+print(1)

@@ -24,8 +24,9 @@ This language is designed around arrays and data contiguity, which is very impor
 [ ] Name mangling
 [ ] Character array based structs
 [ ] Heap allocation
-[ ] Dot operator conversion
+[x] Dot operator conversion
 [x] Pointers
+[ ] Pointer with dot operator bug
 [ ] Type checking
 [ ] Prevent variable shadowing
 [ ] Global variable support?

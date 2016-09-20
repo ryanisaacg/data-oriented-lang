@@ -93,6 +93,32 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return binary_operator("<=", current, new_byte(), types, values);
 	case OP_GREATER_EQUAL:
 		return binary_operator(">=", current, new_byte(), types, values);
+	case OP_MEMBER: {
+		c_ast_node left = analyze_node(current->data.binary[0], types, values);
+		c_ast_node right = analyze_node(current->data.binary[1], types, values);
+		node *declared;
+		char *c_operator;
+		type *left_type = current->data.binary[0]->semantic_type;
+		if(left_type->type == MODIFIER) {
+			declared = left_type->data.modified.modified->data.declared;
+			c_operator = "->";
+		} else {
+			declared = left_type->data.declared;
+			c_operator = ".";
+		}
+		declared = declared->semantic_type->data.declared;
+		char *name = current->data.binary[1]->data.string;
+		listnode list = declared->data.binary[1]->data.list;
+		for(int i = 0; i < list.length; i++) {
+			if(strcmp(name, list.data[i].data.binary[1]->data.string) == 0)
+				current->semantic_type = list.data[i].data.binary[0]->semantic_type;
+		}
+		c_ast_node operator = new_c_node("", 3);
+		add_c_child(&operator, left);
+		add_c_child(&operator, new_c_node(c_operator, 0));
+		add_c_child(&operator, right);
+		return operator;
+	}
 	case OP_DEREF: {
 		c_ast_node deref = new_c_node("*", 1);
 		node *operand = current->data.unary;
