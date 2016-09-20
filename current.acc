@@ -17,9 +17,7 @@ func incr(@int a) void
 	$a = $a + 1
 end
 
-var Point p
-p.x = 1
-p.y = 6
+var Point p = Point{1, 6}
 var @Point q
 q = @p
 incr(@(q.x))

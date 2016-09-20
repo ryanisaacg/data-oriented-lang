@@ -296,6 +296,21 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		current->semantic_type = new_pointer(current->data.unary->semantic_type);
 		return dec;
 	}
+	case TYPE_LITERAL: {
+		c_ast_node literal = new_c_node("((", 4);
+		add_c_child(&literal, analyze_node(current->data.binary[0], types, values));
+		add_c_child(&literal, new_c_node("){", 0));
+		listnode list = current->data.binary[1]->data.list;
+		c_ast_node items = new_c_node("", list.length * 2);
+		c_ast_node comma = new_c_node(",", 0);
+		for(int i = 0; i < list.length; i++) {
+			add_c_child(&items, analyze_node(list.data + i, types, values));
+			add_c_child(&items, comma);
+		}
+		add_c_child(&literal, items);
+		add_c_child(&literal, new_c_node("})", 0));
+		return literal;
+	}
 	default:
 		printf("Unexpected node type in semantic analysis: %s\n", statement_to_string(current->type));
 		return new_c_node("", 0);
