@@ -46,7 +46,7 @@
 %token GEQ_TOKEN
 %token LEQ_TOKEN
 %token CEXTERN_TOKEN
-
+%token NEW_TOKEN
 %left EQ_TOKEN NEQ_TOKEN GEQ_TOKEN LEQ_TOKEN '<' '>'
 %left '='
 %left '+' '-' '%'
@@ -55,6 +55,7 @@
 %nonassoc UMINUS '!'
 %nonassoc '$' '@'
 %left '.'
+%nonassoc NEW_TOKEN
 
 %parse-param {node *root_node}
 
@@ -104,6 +105,7 @@ expression:
 	| '!' expression %prec '!' { $<nval>$ = new_unary_node(OP_BOOL_NOT, $<nval>2); }
 	| '$' expression { $<nval>$ = new_unary_node(OP_DEREF, $<nval>2); }
 	| '@' expression { $<nval>$ = new_unary_node(OP_GETREF, $<nval>2); }
+	| NEW_TOKEN expression { $<nval>$ = new_unary_node(HEAP_INIT, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
 	| type '{' param_list '}' { $<nval>$ = new_binary_node(TYPE_LITERAL, $<nval>1, $<nval>3); }
