@@ -46,3 +46,5 @@ yacc.tab.c: parser.y
 
 build:
 	mkdir build
+
+$(VERBOSE).SILENT:
