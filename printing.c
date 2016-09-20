@@ -228,6 +228,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case STRUCT_DELARATION:
 	case FUNC_CALL:
 	case WHILE:
+	case C_IMPORT:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;

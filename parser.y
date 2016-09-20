@@ -45,6 +45,7 @@
 %token GEQ_TOKEN
 %token LEQ_TOKEN
 %token CEXTERN_TOKEN
+%token CIMPORT_TOKEN
 %token NEW_TOKEN
 %left EQ_TOKEN NEQ_TOKEN GEQ_TOKEN LEQ_TOKEN '<' '>'
 %left '='
@@ -70,10 +71,17 @@ root:
 path:
 	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
 	| path '.' name {add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1;}
+system_path:
+	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| system_path '/' name { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+cimport:
+	CIMPORT_TOKEN name { $<nval>$ = new_binary_node(C_IMPORT, $<nval>2, NULL); }
+	| CIMPORT_TOKEN name system_path { $<nval>$ = new_binary_node(C_IMPORT, $<nval>2, $<nval>3); }
 external:
 	EXPORT_TOKEN path { $<nval>$ = new_unary_node(EXPORT, $<nval>2); }
 	| IMPORT_TOKEN path { $<nval>$ = new_unary_node(IMPORT, $<nval>2); }
 	| CEXTERN_TOKEN name { $<nval>$ = new_unary_node(C_EXTERN, $<nval>2); }
+	| cimport
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); }

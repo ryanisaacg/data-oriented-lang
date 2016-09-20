@@ -28,6 +28,7 @@
 "<=" { return LEQ_TOKEN; }
 ">=" { return GEQ_TOKEN; }
 "cextern" { return CEXTERN_TOKEN; }
+"cimport" { return CIMPORT_TOKEN; }
 "new" { return NEW_TOKEN; }
 
 [A-Za-z_]+[A-Za-z0-9_]* {
