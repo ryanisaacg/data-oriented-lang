@@ -29,7 +29,7 @@ This language is designed around arrays and data contiguity, which is very impor
     * [ ] C header imports
         * [x] Parse include directives
         * [x] Output includes to C
-        * [ ] Add the relevant -I flag to compilation
+        * [x] Add the relevant -I flag to compilation
         * [ ] Parse link flags
         * [ ] Add the relevant flags to compilation
 * [ ] Name mangling
@@ -54,3 +54,4 @@ This language is designed around arrays and data contiguity, which is very impor
 	* [ ] Support for MSVC
 		* [ ] -I equivalent
 * [ ] Coroutines
+* [ ] Multiple return values

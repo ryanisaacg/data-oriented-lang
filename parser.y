@@ -222,8 +222,16 @@ int main(void) {
 	root.data.root.main_list = new_list_node(10);
 	yyparse(&root);
 	fclose(input);
-	c_ast_node result = analyze(root.data.root);
-	FILE *out = popen("gcc -fno-builtin -o build/output.out -xc -", "w");
+	char *cflags = "";
+	int cflags_capacity = 0;
+	c_ast_node result = analyze(root.data.root, &cflags, &cflags_capacity);
+	char *command = "gcc -fno-builtin -o build/output.out -xc -";
+	char *resulting_command = malloc(strlen(command) + strlen(cflags) + 1);
+	resulting_command[0] = '\0';
+	strcat(resulting_command, command);
+	strcat(resulting_command, cflags);
+	printf("%s\n", resulting_command);
+	FILE *out = popen(resulting_command, "w");
 	c_write(out, result);
 	c_write(stdout, result);
 	pclose(out);

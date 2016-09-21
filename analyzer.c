@@ -12,8 +12,9 @@ static c_ast_node analyze_node(node *current, table *types, table *values);
 static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values);
 static c_ast_node binary_operator(char *c_version, node *operator, type *returned, table *types, table *values);
 static c_ast_node analyze_block(node *list, table *types, table *values);
+static void add_flag(char **cflags, int *cflag_capacity, char *new_flag);
 
-c_ast_node analyze(rootnode root) {
+c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 	table *types = new_root_table();
 	table *values = new_root_table();
 	listnode struct_list = root.struct_list->data.list;
@@ -46,6 +47,14 @@ c_ast_node analyze(rootnode root) {
 			strcat(result, name);
 			strcat(result, end_include);
 			add_c_child(&externs, new_c_node(result, 0));
+			if(current.data.binary[1] != NULL) {
+				char *path = current.data.binary[1]->data.string;
+				char *include = malloc(strlen(path) + 3);
+				include[0] = '\0';
+				strcat(include, " -I");
+				strcat(include, path);
+				add_flag(cflags, cflag_capacity, include);
+			}
 		} break;
 		default:
 			fprintf(stderr, "Unexpected node type in externals: %s\n", statement_to_string(current.type));
@@ -356,6 +365,22 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		printf("Unexpected node type in semantic analysis: %s\n", statement_to_string(current->type));
 		return new_c_node("", 0);
 		break;
+	}
+}
+
+static void add_flag(char **cflags, int *cflag_capacity, char *new_flag) {
+	int flag_length = strlen(*cflags);
+	int newflag_length = strlen(new_flag);
+	int new_length = flag_length + newflag_length;
+	if(new_length < *cflag_capacity) {
+		strcat(*cflags, new_flag);
+	} else {
+		char *old_flags = *cflags;
+		*cflags = malloc(new_length * 2);
+		*cflags[0] = '\0';
+		strcat(*cflags, old_flags);
+		*cflag_capacity = new_length * 2;
+		add_flag(cflags, cflag_capacity, new_flag);
 	}
 }
 
