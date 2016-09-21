@@ -123,7 +123,7 @@ declare_list:
 	| declare_list ',' name { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
 	| declare_list ',' name '=' expression { add_to_list($<nval>1, new_binary_node(OP_ASSIGN, $<nval>3, $<nval>5)); $<nval>$ = $<nval>1;}
 variable_declaration:
-	VAR_TOKEN type declare_list { $<nval>$ = new_binary_node(OP_INIT, $<nval>2, $<nval>3); }
+	type declare_list { $<nval>$ = new_binary_node(OP_INIT, $<nval>1, $<nval>2); }
 //STRUCT
 name_type_pair:
 	type name {
