@@ -28,10 +28,10 @@ This language is designed around arrays and data contiguity, which is very impor
     * [ ] C struct extern declarations
     * [ ] C header imports
         * [x] Parse include directives
-        * [ ] Output includes to C
+        * [x] Output includes to C
         * [ ] Add the relevant -I flag to compilation
-        * [ ] Windows compatibility for the -I flag
-        * [ ] Allow relative paths
+        * [ ] Parse link flags
+        * [ ] Add the relevant flags to compilation
 * [ ] Name mangling
 * [ ] Character array based structs
 * [x] Heap allocation
@@ -51,4 +51,6 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Abstract data types
 * [x] Output struct literals
 * [x] Output binary without outputting C file
+	* [ ] Support for MSVC
+		* [ ] -I equivalent
 * [ ] Coroutines

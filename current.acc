@@ -1,3 +1,5 @@
+cimport math
+
 type Point struct
     int x
     int y

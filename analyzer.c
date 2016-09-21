@@ -21,10 +21,11 @@ c_ast_node analyze(rootnode root) {
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
 	c_ast_node c_root = new_c_node( "extern void printf(); extern void *memcpy(); extern void *malloc();", func_list.length + 6);
-	c_ast_node externs = new_c_node( "", external_list.length / 2);
+	c_ast_node externs = new_c_node( "", external_list.length);
 	for(int i = 0; i < external_list.length; i++) {
 		node current = external_list.data[i];
-		if(current.type == C_EXTERN) {
+		switch(current.type) {
+		case C_EXTERN: {
 			node *n = malloc(sizeof(node));
 			char *name = current.data.binary[0]->data.string;
 			n->semantic_type = c_binding();
@@ -33,6 +34,20 @@ c_ast_node analyze(rootnode root) {
 			add_c_child(&ext, new_c_node(name, 0));
 			add_c_child(&ext, new_c_node("();", 0));
 			add_c_child(&externs, ext);
+		} break;
+		case C_IMPORT: {
+			char *include = "\n#include \"";
+			char *name = current.data.binary[0]->data.string;
+			char *end_include = ".h\"\n";
+			char *result = malloc(sizeof(strlen(include) + strlen(name) + strlen(end_include) + 1));
+			strcat(result, include);
+			strcat(result, name);
+			strcat(result, end_include);
+			add_c_child(&externs, new_c_node(result, 0));
+		} break;
+		default:
+			fprintf(stderr, "Unexpected node type in externals: %s\n", statement_to_string(current.type));
+			break;
 		}
 	}
 	add_c_child(&c_root, externs);

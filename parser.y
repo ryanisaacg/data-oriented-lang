@@ -225,6 +225,7 @@ int main(void) {
 	c_ast_node result = analyze(root.data.root);
 	FILE *out = popen("gcc -fno-builtin -o build/output.out -xc -", "w");
 	c_write(out, result);
+	c_write(stdout, result);
 	pclose(out);
 	return 0;
 }
