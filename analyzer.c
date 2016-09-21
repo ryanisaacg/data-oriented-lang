@@ -39,7 +39,9 @@ c_ast_node analyze(rootnode root) {
 			char *include = "\n#include \"";
 			char *name = current.data.binary[0]->data.string;
 			char *end_include = ".h\"\n";
-			char *result = malloc(sizeof(strlen(include) + strlen(name) + strlen(end_include) + 1));
+			int length = strlen(include) + strlen(name) + strlen(end_include) + 1;
+			char *result = malloc(length);
+			result[0] = '\0';
 			strcat(result, include);
 			strcat(result, name);
 			strcat(result, end_include);
