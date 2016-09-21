@@ -44,6 +44,9 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Functional programming
     * [ ] Pure anonymous functions
     * [ ] Clojure capturing
+    * [ ] Function pointers
+    * [ ] Map/filter/reduce
 * [ ] Abstract data types
 * [x] Output struct literals
 * [x] Output binary without outputting C file
+* [ ] Coroutines
