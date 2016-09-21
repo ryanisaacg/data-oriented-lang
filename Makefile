@@ -2,14 +2,15 @@ C_FLAGS=-Wall -Werror -Wextra -Wfatal-errors -pedantic -std=c99 -Wno-unused-func
 L_FLAGS=
 all: build/parser.out
 
-run: all
-	build/./parser.out
-	gcc build/output.c -fno-builtin -o build/output.out
+run: build/output.out
 	build/./output.out
 
 clean:
 	rm -r build
 	rm lex.c yacc.tab.c
+
+build/output.out: build/parser.out current.acc
+	build/./parser.out
 
 build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o
 	gcc build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o -o build/parser.out
@@ -46,3 +47,5 @@ yacc.tab.c: parser.y
 
 build:
 	mkdir build
+
+$(VERBOSE).SILENT:

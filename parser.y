@@ -8,7 +8,6 @@
 	#include "analyzer.h"
 	#include "output.h"
 	#include "printing.h"
-	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
 	#include "yacc.tab.h"
@@ -46,7 +45,8 @@
 %token GEQ_TOKEN
 %token LEQ_TOKEN
 %token CEXTERN_TOKEN
-
+%token CIMPORT_TOKEN
+%token NEW_TOKEN
 %left EQ_TOKEN NEQ_TOKEN GEQ_TOKEN LEQ_TOKEN '<' '>'
 %left '='
 %left '+' '-' '%'
@@ -55,6 +55,7 @@
 %nonassoc UMINUS '!'
 %nonassoc '$' '@'
 %left '.'
+%nonassoc NEW_TOKEN
 
 %parse-param {node *root_node}
 
@@ -70,10 +71,17 @@ root:
 path:
 	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
 	| path '.' name {add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1;}
+system_path:
+	name { $<nval>$ = new_list_node(10); add_to_list($<nval>$, $<nval>1); }
+	| system_path '/' name { add_to_list($<nval>1, $<nval>3); $<nval>$ = $<nval>1; }
+cimport:
+	CIMPORT_TOKEN name { $<nval>$ = new_binary_node(C_IMPORT, $<nval>2, NULL); }
+	| CIMPORT_TOKEN name system_path { $<nval>$ = new_binary_node(C_IMPORT, $<nval>2, $<nval>3); }
 external:
 	EXPORT_TOKEN path { $<nval>$ = new_unary_node(EXPORT, $<nval>2); }
 	| IMPORT_TOKEN path { $<nval>$ = new_unary_node(IMPORT, $<nval>2); }
 	| CEXTERN_TOKEN name { $<nval>$ = new_unary_node(C_EXTERN, $<nval>2); }
+	| cimport
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); }
@@ -104,6 +112,7 @@ expression:
 	| '!' expression %prec '!' { $<nval>$ = new_unary_node(OP_BOOL_NOT, $<nval>2); }
 	| '$' expression { $<nval>$ = new_unary_node(OP_DEREF, $<nval>2); }
 	| '@' expression { $<nval>$ = new_unary_node(OP_GETREF, $<nval>2); }
+	| NEW_TOKEN expression { $<nval>$ = new_unary_node(HEAP_INIT, $<nval>2); }
 	| expression '^' expression { $<nval>$ = new_binary_node(OP_EXP, $<nval>1, $<nval>3); }
 	| name '(' param_list ')' { $<nval>$ = new_binary_node(FUNC_CALL, $<nval>1, $<nval>3); }
 	| type '{' param_list '}' { $<nval>$ = new_binary_node(TYPE_LITERAL, $<nval>1, $<nval>3); }
@@ -201,6 +210,8 @@ boolean:
 		$<nval>$ = expr; }
 %%
 
+#include <stdio.h>
+
 extern FILE* yyin;
 
 int main(void) {
@@ -214,11 +225,9 @@ int main(void) {
 	root.data.root.main_list = new_list_node(10);
 	yyparse(&root);
 	fclose(input);
-	print_expression(&root);
 	c_ast_node result = analyze(root.data.root);
-	FILE *out = fopen("build/output.c", "w");
+	FILE *out = popen("gcc -fno-builtin -o build/output.out -xc -", "w");
 	c_write(out, result);
-	fclose(out);
-	print_expression(&root);
+	pclose(out);
 	return 0;
 }

@@ -4,7 +4,9 @@
 #include "printing.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "table.h"
+#include "printing.h"
 
 static c_ast_node analyze_node(node *current, table *types, table *values);
 static c_ast_node binary_operator_left_typed(char *c_version, node *operator, table *types, table *values);
@@ -18,7 +20,7 @@ c_ast_node analyze(rootnode root) {
 	listnode func_list = root.func_list->data.list;
 	listnode main_list = root.main_list->data.list;
 	listnode external_list = root.ext_list->data.list;
-	c_ast_node c_root = new_c_node( "", func_list.length + 6);
+	c_ast_node c_root = new_c_node( "extern void printf(); extern void *memcpy(); extern void *malloc();", func_list.length + 6);
 	c_ast_node externs = new_c_node( "", external_list.length / 2);
 	for(int i = 0; i < external_list.length; i++) {
 		node current = external_list.data[i];
@@ -91,6 +93,31 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		return binary_operator("<=", current, new_byte(), types, values);
 	case OP_GREATER_EQUAL:
 		return binary_operator(">=", current, new_byte(), types, values);
+	case OP_MEMBER: {
+		c_ast_node left = analyze_node(current->data.binary[0], types, values);
+		c_ast_node right = analyze_node(current->data.binary[1], types, values);
+		node *declared;
+		char *c_operator;
+		type *left_type = current->data.binary[0]->semantic_type;
+		if(left_type->type == MODIFIER) {
+			declared = left_type->data.modified.modified->data.declared;
+			c_operator = "->";
+		} else {
+			declared = left_type->data.declared;
+			c_operator = ".";
+		}
+		char *name = current->data.binary[1]->data.string;
+		listnode list = declared->data.binary[1]->data.list;
+		for(int i = 0; i < list.length; i++) {
+			if(strcmp(name, list.data[i].data.binary[1]->data.string) == 0)
+				current->semantic_type = list.data[i].data.binary[0]->semantic_type;
+		}
+		c_ast_node operator = new_c_node("", 3);
+		add_c_child(&operator, left);
+		add_c_child(&operator, new_c_node(c_operator, 0));
+		add_c_child(&operator, right);
+		return operator;
+	}
 	case OP_DEREF: {
 		c_ast_node deref = new_c_node("*", 1);
 		node *operand = current->data.unary;
@@ -105,21 +132,51 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		current->semantic_type = operand->semantic_type->data.modified.modified;
 		return deref;
 	}
+	case HEAP_INIT: {
+		node *operand = current->data.unary;
+		c_ast_node type, initializer;
+		if(operand->type == NUM) {
+			type = new_c_node("int", 0); //TODO: NOT ALL NUMBERS ARE INTS
+			initializer = new_c_node("(int){", 2);
+			add_c_child(&initializer, analyze_node(operand, types, values));
+			add_c_child(&initializer, new_c_node("}", 0));
+		} else if(operand->type == TYPE_LITERAL) {
+			type = analyze_node(operand->data.binary[0], types, values);
+			initializer = analyze_node(operand, types, values);
+		}
+		c_ast_node size = new_c_node("sizeof(", 2);
+		add_c_child(&size, type);
+		add_c_child(&size, new_c_node(")", 0));
+		c_ast_node output = new_c_node("memcpy(malloc(", 6);
+		add_c_child(&output, size);
+		add_c_child(&output, new_c_node("), &", 0));
+		add_c_child(&output, initializer);
+		add_c_child(&output, new_c_node(", ", 0));
+		add_c_child(&output, size);
+		add_c_child(&output, new_c_node(");", 0));
+		return output;
+	}
 	case STRING:
 		current->semantic_type = new_array(new_byte());
 		return new_c_node(current->data.string, 0);
-	case NAME:
-		current->semantic_type = new_declared(table_get(values, current->data.string));
+	case NAME: {
+		node *type_source = table_get(values, current->data.string);
+		if(type_source == NULL)
+			type_source = table_get(types, current->data.string);
+		if(type_source != NULL)
+			current->semantic_type = type_source->semantic_type;
 		return new_c_node(current->data.string, 0);
+	}
 	case NUM:
 		//TODO: THIS IS DEFINITELY NOT A GOOD ASSUMTPION
 		current->semantic_type = new_int(4);
 		char *string = malloc(sizeof(char) * 10); //ALSO NOT A GOOD ASSUMPTION
 		sprintf(string, "%d", current->data.integer);
 		return new_c_node(string, 0);
-	case TYPE:
+	case TYPE: {
 		current->semantic_type = new_declared(table_get(values, current->data.string));
 		return new_c_node(current->data.string, 0);
+	}
 	case IF: {
 		values = new_table(values);
 		c_ast_node header = analyze_node(current->data.ternary[0], types, values);
@@ -191,6 +248,7 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		for(int i = 0; i < len; i++) {
 			add_c_child(&declarations, type);
 			node *declared = &(current->data.binary[1]->data.list.data[i]);
+			declared->semantic_type = current->data.binary[0]->semantic_type;
 			if(declared->type == OP_ASSIGN)
 				table_insert(values, declared->data.binary[0]->data.string, current->data.binary[0]);
 			else
@@ -259,10 +317,26 @@ static c_ast_node analyze_node(node *current, table *types, table *values) {
 		c_ast_node dec = new_c_node("", 2);
 		add_c_child(&dec, analyze_node(current->data.unary, types, values));
 		add_c_child(&dec, new_c_node("*", 0));
+		current->semantic_type = new_pointer(current->data.unary->semantic_type);
 		return dec;
 	}
+	case TYPE_LITERAL: {
+		c_ast_node literal = new_c_node("((", 4);
+		add_c_child(&literal, analyze_node(current->data.binary[0], types, values));
+		add_c_child(&literal, new_c_node("){", 0));
+		listnode list = current->data.binary[1]->data.list;
+		c_ast_node items = new_c_node("", list.length * 2);
+		c_ast_node comma = new_c_node(",", 0);
+		for(int i = 0; i < list.length; i++) {
+			add_c_child(&items, analyze_node(list.data + i, types, values));
+			add_c_child(&items, comma);
+		}
+		add_c_child(&literal, items);
+		add_c_child(&literal, new_c_node("})", 0));
+		return literal;
+	}
 	default:
-		printf("Unexpected node type in semantic analysis: %d", current->type);
+		printf("Unexpected node type in semantic analysis: %s\n", statement_to_string(current->type));
 		return new_c_node("", 0);
 		break;
 	}

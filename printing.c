@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "printing.h"
 
-static char *statement_to_string(node_type type) {
+char *statement_to_string(node_type type) {
 	switch(type) {
         case OP_ADD:
         	return "OP_ADD";
@@ -205,6 +205,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case ARRAY_OF:
 	case POINTER_OF:
 	case ARRAY_LITERAL:
+	case HEAP_INIT:
 		print_expression_tabbed(expr->data.unary, tab + 1);
 		break;
 	case OP_ADD:
@@ -227,6 +228,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case STRUCT_DELARATION:
 	case FUNC_CALL:
 	case WHILE:
+	case C_IMPORT:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;

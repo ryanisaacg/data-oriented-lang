@@ -1,5 +1,3 @@
-cextern printf
-
 type Point struct
     int x
     int y
@@ -17,7 +15,5 @@ func incr(@int a) void
 	$a = $a + 1
 end
 
-var int x = 5
-incr(@x)
-print(x)
-print(x)
+var @Point q = new Point{1, 6}
+print(q.x)
