@@ -43,6 +43,11 @@ This language is designed around arrays and data contiguity, which is very impor
     * [ ] Namespace name mangling (requires name mangling)
     * [ ] Namespace operator
     * [ ] Clarke standard library
+    * [ ] Clarke search / link path
+    * [ ] Incremental compilation
+		* [ ] Create a loadable representation of a single file
+		* [ ] Output the representation when compiled and not linking
+		* [ ] Read in the representation when linking object files
 * [ ] Functional programming
     * [ ] Pure anonymous functions
     * [ ] Clojure capturing
