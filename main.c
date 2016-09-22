@@ -6,7 +6,14 @@
 #include <string.h>
 #include "yacc.tab.h"
 
-extern void yyparse(node *root);
+#ifdef _WIN32
+	extern FILE *_popen();
+	extern void _pclose(FILE*);
+	#define popen _popen
+	#define pclose _pclose
+#endif
+
+extern void yyparse(node *root, char *filename);
 extern FILE *yyin;
 
 int main(void) {
