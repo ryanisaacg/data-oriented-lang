@@ -2,36 +2,37 @@
 
 #include <stdlib.h>
 
-node *new_node(node_type type) {
+node *new_node(node_type type, origin o) {
 	node *new = malloc(sizeof(node));
 	new->type = type;
 	new->semantic_type = NULL;
+	new->origin = o;
 	return new;
 }
 
-node *new_ternary_node(node_type type, node *one, node *two, node *three) {
-	node *new = new_node(type);
+node *new_ternary_node(node_type type, node *one, node *two, node *three, origin o) {
+	node *new = new_node(type, o);
 	new->data.ternary[0] = one;
 	new->data.ternary[1] = two;
 	new->data.ternary[2] = three;
 	return new;
 }
 
-node *new_binary_node(node_type type, node *left, node *right) {
-	node *new = new_node(type);
+node *new_binary_node(node_type type, node *left, node *right, origin o) {
+	node *new = new_node(type, o);
 	new->data.binary[0] = left;
 	new->data.binary[1] = right;
 	return new;
 }
 
-node *new_unary_node(node_type type, node *operand) {
-	node *expr = new_node(type);
+node *new_unary_node(node_type type, node *operand, origin o) {
+	node *expr = new_node(type, o);
 	expr->data.unary = operand;
 	return expr;
 }
 
-node *new_list_node(int initial_size) {
-	node *new = new_node(LIST);
+node *new_list_node(int initial_size, origin o) {
+	node *new = new_node(LIST, o);
 	new->data.list.data = malloc(sizeof(node) * initial_size);
 	new->data.list.capacity = initial_size;
 	new->data.list.length = 0;

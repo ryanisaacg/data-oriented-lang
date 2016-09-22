@@ -40,8 +40,8 @@ build/lex.o: yacc.tab.c lex.c
 	gcc lex.c -c -o build/lex.o
 
 build/main.o: main.c build/yacc.o build/analyzer.o build/output.o yacc.tab.c
-	gcc main.c -c -o build/main.o
-
+	gcc $(C_FLAGS) main.c -c -o build/main.o
+	
 lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
 

@@ -38,7 +38,7 @@ This language is designed around arrays and data contiguity, which is very impor
 		* [ ] Type checking
 			* [ ] Error reporting
 			* [ ] Improved error messages
-			* [ ] Add line number to nodes
+			* [x] Add line number to nodes
 			* [ ] Error module
 			* [ ] Type checking
 			* [ ] Prevent variable shadowing

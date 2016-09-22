@@ -88,7 +88,7 @@ c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 	for(int i = 0; i < func_list.length; i++) {
 		add_c_child(&c_root, analyze_node(func_list.data + i, types, values));
 	}
-	node *m = new_list_node(main_list.length);
+	node *m = new_list_node(main_list.length, (origin){"", 0});
 	for(int i = 0; i < main_list.length; i++) {
 		add_to_list(m, main_list.data + i);
 	}
