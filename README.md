@@ -33,6 +33,7 @@ This language is designed around arrays and data contiguity, which is very impor
         * [ ] Parse link flags
         * [ ] Add the relevant flags to compilation
 * [ ] Name mangling
+	* [ ] Type checking
 * [ ] Character array based structs
 * [x] Heap allocation
 * [x] Dot operator conversion
