@@ -12,7 +12,7 @@ clean:
 build/output.out: build/parser.out current.acc
 	build/./parser.out
 
-build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o build/main.o
+build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o build/main.o build/errors.o
 	gcc build/*.o -o build/parser.out
 
 build/analyzer.o: analyzer.h analyzer.c build/table.o build/node.o build/type.o
@@ -41,7 +41,10 @@ build/lex.o: yacc.tab.c lex.c
 
 build/main.o: main.c build/yacc.o build/analyzer.o build/output.o yacc.tab.c
 	gcc $(C_FLAGS) main.c -c -o build/main.o
-	
+
+build/errors.o: errors.c errors.h origin.h
+	gcc $(C_FLAGS) errors.c -c -o build/errors.o
+
 lex.c: yacc.tab.h parser.l
 	flex -olex.c parser.l
 
