@@ -6,19 +6,29 @@
 #include <string.h>
 #include "yacc.tab.h"
 
-extern void yyparse(node *root);
+#ifndef __MINGW64__
+#ifdef _WIN32
+	extern FILE *_popen();
+	extern void _pclose(FILE*);
+	#define popen _popen
+	#define pclose _pclose
+#endif
+#endif
+
+extern void yyparse(node *root, char *filename);
 extern FILE *yyin;
 
 int main(void) {
-	FILE *input = fopen("current.acc", "r");
+	char *filename = "current.acc";
+	FILE *input = fopen(filename, "r");
 	yyin = input;
 	node root;
 	root.type = ROOT;
-	root.data.root.ext_list = new_list_node(10);
-	root.data.root.struct_list = new_list_node(10);
-	root.data.root.func_list = new_list_node(10);
-	root.data.root.main_list = new_list_node(10);
-	yyparse(&root);
+	root.data.root.ext_list = new_list_node(10, (origin){filename, 0});
+	root.data.root.struct_list = new_list_node(10, (origin){filename, 0});
+	root.data.root.func_list = new_list_node(10, (origin){filename, 0});
+	root.data.root.main_list = new_list_node(10, (origin){filename, 0});
+	yyparse(&root, filename);
 	fclose(input);
 	char *cflags = "";
 	int cflags_capacity = 0;

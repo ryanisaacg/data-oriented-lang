@@ -8,12 +8,6 @@ This language is designed around arrays and data contiguity, which is very impor
 * [x] Fix dot operator bug
 * [x] Integer to string function
 * [ ] Instant symbol table insertion while parsing
-* [ ] Error reporting
-    * [ ] Improved error messages
-    * [ ] Add line number to nodes
-    * [ ] Error module
-    * [ ] Type checking
-    * [ ] Prevent variable shadowing
 * [x] Branching
     * [x] Else
     * [x] Else if
@@ -32,7 +26,6 @@ This language is designed around arrays and data contiguity, which is very impor
         * [x] Add the relevant -I flag to compilation
         * [x] Parse link flags
         * [x] Add the relevant flags to compilation
-* [ ] Name mangling
 * [ ] Character array based structs
 * [x] Heap allocation
 * [x] Dot operator conversion
@@ -40,9 +33,22 @@ This language is designed around arrays and data contiguity, which is very impor
     * [x] Pointer with dot operator bug
 * [ ] Global variable support?
 * [ ] Imports for other clarke files
-    * [ ] Namespace name mangling (requires name mangling)
+    * [ ] Namespace name mangling
+		* [ ] Name mangling
+		* [ ] Type checking
+			* [ ] Error reporting
+			* [ ] Improved error messages
+			* [x] Add line number to nodes
+			* [x] Error module
+			* [ ] Type checking
+			* [ ] Prevent variable shadowing
     * [ ] Namespace operator
     * [ ] Clarke standard library
+    * [ ] Clarke search / link path
+    * [ ] Incremental compilation
+		* [ ] Create a loadable representation of a single file
+		* [ ] Output the representation when compiled and not linking
+		* [ ] Read in the representation when linking object files
 * [ ] Functional programming
     * [ ] Pure anonymous functions
     * [ ] Clojure capturing

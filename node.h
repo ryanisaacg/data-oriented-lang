@@ -1,5 +1,6 @@
 #pragma once
 
+#include "origin.h"
 #include "type.h"
 
 struct node;
@@ -38,12 +39,13 @@ struct node {
 	} data;
 	node_type type;
 	type *semantic_type;
+	origin origin;
 };
 
-node *new_node(node_type type);
-node *new_ternary_node(node_type type, node *one, node *two, node *three);
-node *new_binary_node(node_type type, node *left, node *right);
-node *new_unary_node(node_type type, node *operand);
-node *new_list_node(int initial_size);
+node *new_node(node_type type, origin o);
+node *new_ternary_node(node_type type, node *one, node *two, node *three, origin o);
+node *new_binary_node(node_type type, node *left, node *right, origin o);
+node *new_unary_node(node_type type, node *operand, origin o);
+node *new_list_node(int initial_size, origin o);
 void add_to_list(node *list, node *item);
 node *get_from_list(node *list, int index);
