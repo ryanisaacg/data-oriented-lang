@@ -26,7 +26,8 @@ void table_insert(table *tbl, char *name, node *declaration) {
 		tbl->entries[tbl->length].declaration = declaration;
 		tbl->length++;
 	} else {
-		tbl->entries = realloc(tbl->entries, tbl->capacity + 10);
+		tbl->entries = realloc(tbl->entries, sizeof(table_entry) * (tbl->capacity + 10));
+		tbl->capacity += 10;
 		table_insert(tbl, name, declaration);
 	}
 }
