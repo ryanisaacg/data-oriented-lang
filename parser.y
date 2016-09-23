@@ -46,6 +46,7 @@
 %token LEQ_TOKEN
 %token CEXTERN_TOKEN
 %token CIMPORT_TOKEN
+%token CLINK_TOKEN
 %token NEW_TOKEN
 %left EQ_TOKEN NEQ_TOKEN GEQ_TOKEN LEQ_TOKEN '<' '>'
 %left '='
@@ -74,11 +75,15 @@ path:
 cimport:
 	CIMPORT_TOKEN name { $<nval>$ = new_binary_node(C_IMPORT, $<nval>2, NULL); }
 	| CIMPORT_TOKEN name string { $<nval>$ = new_binary_node(C_IMPORT, $<nval>2, $<nval>3); }
+clink:
+	CLINK_TOKEN string { $<nval>$ = new_binary_node(C_LINK, $<nval>2, new_list_node(10)); }
+	| clink string {add_to_list($<nval>1->data.binary[1], $<nval>2); $<nval>$ = $<nval>1; }
 external:
 	EXPORT_TOKEN path { $<nval>$ = new_unary_node(EXPORT, $<nval>2); }
 	| IMPORT_TOKEN path { $<nval>$ = new_unary_node(IMPORT, $<nval>2); }
 	| CEXTERN_TOKEN name { $<nval>$ = new_unary_node(C_EXTERN, $<nval>2); }
 	| cimport
+	| clink
 //FUNCTIONS
 param_list:
 	/*Empty parameter list*/ { $<nval>$ = new_list_node(0); }

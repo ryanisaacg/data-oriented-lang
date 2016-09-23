@@ -56,6 +56,23 @@ c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 				add_flag(cflags, cflag_capacity, include);
 			}
 		} break;
+		case C_LINK: {
+			char *folder = current.data.binary[0]->data.string;
+			char *link_folder = malloc(strlen(folder) + 3);
+			link_folder[0] = '\0';
+			strcat(link_folder, " -L");
+			strcat(link_folder, folder);
+			add_flag(cflags, cflag_capacity, link_folder);
+			listnode list = current.data.binary[1]->data.list;
+			for(int i = 0; i < list.length; i++) {
+				char *path = list.data[i].data.string;
+				char *link = malloc(strlen(path) + 3);
+				link[0] = '\0';
+				strcat(link, " -l");
+				strcat(link, path);
+				add_flag(cflags, cflag_capacity, link);
+			}
+		} break;
 		default:
 			fprintf(stderr, "Unexpected node type in externals: %s\n", statement_to_string(current.type));
 			break;

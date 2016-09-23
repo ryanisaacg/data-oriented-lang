@@ -174,6 +174,9 @@ char *statement_to_string(node_type type) {
 		case C_EXTERN:
 			return "C EXTERNAL";
 		break;
+		case C_LINK:
+			return "C LINK";
+		break;
 		case ARRAY_OF:
 			return "ARRAY";
 		break;
@@ -229,6 +232,7 @@ static void print_expression_tabbed(node *expr, int tab) {
 	case FUNC_CALL:
 	case WHILE:
 	case C_IMPORT:
+	case C_LINK:
 		print_expression_tabbed(expr->data.binary[0], tab + 1);
 		print_expression_tabbed(expr->data.binary[1], tab + 1);
 		break;

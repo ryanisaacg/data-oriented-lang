@@ -29,6 +29,7 @@
 ">=" { return GEQ_TOKEN; }
 "cextern" { return CEXTERN_TOKEN; }
 "cimport" { return CIMPORT_TOKEN; }
+"clink" { return CLINK_TOKEN; }
 "new" { return NEW_TOKEN; }
 
 [A-Za-z_]+[A-Za-z0-9_]* {

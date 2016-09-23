@@ -26,12 +26,12 @@ This language is designed around arrays and data contiguity, which is very impor
     * [x] C function extern declarations
     * [ ] C function extern return values
     * [ ] C struct extern declarations
-    * [ ] C header imports
+    * [x] C header imports
         * [x] Parse include directives
         * [x] Output includes to C
         * [x] Add the relevant -I flag to compilation
-        * [ ] Parse link flags
-        * [ ] Add the relevant flags to compilation
+        * [x] Parse link flags
+        * [x] Add the relevant flags to compilation
 * [ ] Name mangling
 * [ ] Character array based structs
 * [x] Heap allocation
