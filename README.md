@@ -19,7 +19,7 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] C interaction
     * [x] C function extern declarations
     * [ ] C function extern return values
-    * [ ] C struct extern declarations
+    * [x] ~~C struct extern declarations ~~ (see C namespace)
     * [x] C header imports
         * [x] Parse include directives
         * [x] Output includes to C
