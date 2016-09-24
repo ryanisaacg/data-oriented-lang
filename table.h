@@ -1,5 +1,6 @@
 #pragma once
 
+#include "list.h"
 #include "node.h"
 
 struct table;
@@ -15,8 +16,7 @@ struct table_entry {
 
 struct table {
 	table *parent;
-	table_entry *entries;
-	int length, capacity;
+	list entries;
 };
 
 table *new_root_table();

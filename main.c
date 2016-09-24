@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "yacc.tab.h"
 
 #ifndef __MINGW64__
@@ -15,7 +16,10 @@
 #endif
 #endif
 
-extern void yyparse(node *root, char *filename);
+
+extern FILE *popen();
+extern void _pclose(FILE*);
+extern int yyparse(node *root, char *filename);
 extern FILE *yyin;
 
 int main(void) {

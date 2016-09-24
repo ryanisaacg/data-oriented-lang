@@ -8,9 +8,7 @@
 table *new_root_table() {
 	table *tbl = malloc(sizeof(table));
 	tbl->parent = NULL;
-	tbl->entries = malloc(sizeof(table_entry) * TABLE_INIT_SIZE);
-	tbl->length = 0;
-	tbl->capacity = TABLE_INIT_SIZE;
+	tbl->entries = list_new(10, sizeof(table_entry));
 	return tbl;
 }
 
@@ -21,22 +19,15 @@ table *new_table(table *parent) {
 }
 
 void table_insert(table *tbl, char *name, node *declaration) {
-	if(tbl->length < tbl->capacity) {
-		tbl->entries[tbl->length].name = name;
-		tbl->entries[tbl->length].declaration = declaration;
-		tbl->length++;
-	} else {
-		tbl->entries = realloc(tbl->entries, sizeof(table_entry) * (tbl->capacity + 10));
-		tbl->capacity += 10;
-		table_insert(tbl, name, declaration);
-	}
+	table_entry entry = {name, declaration};
+	list_add(&(tbl->entries), &entry);
 }
 
 node *table_get(table *tbl, char *name) {
-	for(int i = 0; i < tbl->length; i++) {
-		table_entry entry = tbl->entries[i];
-		if(strcmp(entry.name, name) == 0) {
-			return entry.declaration;
+	for(unsigned int i = 0; i < tbl->entries.length; i++) {
+		table_entry *entry = list_get(tbl->entries, i);
+		if(strcmp(entry->name, name) == 0) {
+			return entry->declaration;
 		}
 	}
 	if(tbl->parent != NULL) {
@@ -47,6 +38,6 @@ node *table_get(table *tbl, char *name) {
 }
 
 void table_destroy(table *tbl) {
-	free(tbl->entries);
+	list_destroy(tbl->entries);
 	free(tbl);
 }
