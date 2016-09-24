@@ -62,3 +62,4 @@ This language is designed around arrays and data contiguity, which is very impor
 		* [ ] -I equivalent
 * [ ] Coroutines
 * [ ] Multiple return values
+* [ ] Commented code / parser
