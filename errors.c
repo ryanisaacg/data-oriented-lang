@@ -8,6 +8,7 @@ void throw_error(error err) {
 		fprintf(stderr, "Error at line %d in file %s: %s\n(%s)\n", err.origin.line, err.origin.filename, type_to_string(err.type), err.data);
 	else
 		fprintf(stderr, "Error at line %d in file %s: %s\n", err.origin.line, err.origin.filename, type_to_string(err.type));
+	raise(SIGABRT);
 }
 
 static char* type_to_string(error_type type) {
