@@ -14,10 +14,10 @@ static char* type_to_string(error_type type) {
 	switch(type) {
 	case ERROR_MISMATCHED_TYPES:
 		return "Mismatched types";
-		break;
 	case ERROR_UNDELARED_VAR:
 		return "Unknown or undeclared variable";
-		break;
+	case ERROR_NO_SUCH_MEMBER:
+		return "Not such member in type";
 	}
 	return "Unknown error type";
 }
