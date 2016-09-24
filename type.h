@@ -7,7 +7,7 @@ struct node;
 struct type;
 typedef struct type type;
 
-typedef enum {FLOAT, INT_TYPE, BYTE} numeric_type;
+typedef enum {BYTE, INT_TYPE, FLOAT} numeric_type; //In ascending order of precedence
 
 typedef struct {
 	numeric_type type;
