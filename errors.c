@@ -18,6 +18,8 @@ static char* type_to_string(error_type type) {
 		return "Unknown or undeclared variable";
 	case ERROR_NO_SUCH_MEMBER:
 		return "Not such member in type";
+	case ERROR_TYPE_NOT_FOUND:
+		return "Type does not exist";
 	}
 	return "Unknown error type";
 }
