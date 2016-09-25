@@ -36,11 +36,11 @@ This language is designed around arrays and data contiguity, which is very impor
     * [ ] Namespace name mangling
 		* [ ] Name mangling
 		* [ ] Type checking
-			* [ ] Error reporting
+			* [x] Error reporting
 			* [ ] Improved error messages
 			* [x] Add line number to nodes
 			* [x] Error module
-			* [ ] Type checking
+			* [x] Type checking
 			* [ ] Prevent variable shadowing
             * [ ] Proper boolean type
             * [ ] Proper string type
