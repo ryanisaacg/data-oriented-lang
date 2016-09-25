@@ -14,13 +14,13 @@ table *new_root_table() {
 	return tbl;
 }
 
-table *new_table(table *parent) {
+table *new_table(const table *parent) {
 	table *tbl = new_root_table();
 	tbl->parent = parent;
 	return tbl;
 }
 
-void table_insert(table *tbl, char *name, node *declaration) {
+void table_insert(table *tbl, const char *name, const node *declaration) {
 	if(tbl->length < tbl->capacity) {
 		tbl->entries[tbl->length].name = name;
 		tbl->entries[tbl->length].declaration = declaration;
@@ -32,7 +32,7 @@ void table_insert(table *tbl, char *name, node *declaration) {
 	}
 }
 
-node *table_get(table *tbl, char *name) {
+const node *table_get(const table *tbl, const char *name) {
 	for(int i = 0; i < tbl->length; i++) {
 		table_entry entry = tbl->entries[i];
 		if(strcmp(entry.name, name) == 0) {
