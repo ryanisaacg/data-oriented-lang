@@ -38,7 +38,7 @@ struct node {
 		int integer;
 	} data;
 	node_type type;
-	type *semantic_type;
+	const type *semantic_type;
 	origin origin;
 };
 
