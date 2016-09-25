@@ -1,4 +1,5 @@
 #include "errors.h"
+#include <signal.h>
 #include <stdio.h>
 
 static char* type_to_string(error_type type);
