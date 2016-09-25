@@ -68,6 +68,8 @@ bool equal(type *t1, type *t2) {
         return t1->data.number.type == t2->data.number.type && t1->data.number.bytes == t2->data.number.bytes;
     case C_BINDING:
         return true;
+    case VOID:
+        return true;
     }
     return false;
 }
@@ -102,7 +104,15 @@ type *type_merge(type *t1, type *t2) {
 				t->data.number = (primitive){num, bytes};
 				return t;
 			}
+        case VOID:
+            return NULL;
 		}
 	}
 	return NULL;
+}
+
+type *new_void() {
+    type *t = malloc(sizeof(type));
+    t->type = VOID;
+    return t;
 }

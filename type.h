@@ -26,7 +26,7 @@ typedef union {
 } type_data;
 
 struct type {
-	enum {DECLARATION, MODIFIER, NUMBER, C_BINDING} type;
+	enum {DECLARATION, MODIFIER, NUMBER, C_BINDING, VOID} type;
 	type_data data;
 };
 
@@ -38,4 +38,5 @@ type *new_byte();
 type *new_pointer(type *wrapped);
 type *new_array(type *array);
 type *type_merge(type *t1, type *t2);
+type *new_void();
 bool equal(type *t1, type *t2);
