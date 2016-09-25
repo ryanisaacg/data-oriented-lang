@@ -9,7 +9,7 @@ type *c_binding() {
     return t;
 }
 
-type *new_declared(node *declared) {
+type *new_declared(const node *declared) {
     type *t = malloc(sizeof(type));
     t->type = DECLARATION;
     t->data.declared = declared;
@@ -40,7 +40,7 @@ type *new_byte() {
     return t;
 }
 
-type *new_pointer(type *wrapped) {
+type *new_pointer(const type *wrapped) {
     type *t = malloc(sizeof(type));
     t->type = MODIFIER;
     t->data.modified.type = POINTER;
@@ -48,7 +48,7 @@ type *new_pointer(type *wrapped) {
     return t;
 }
 
-type *new_array(type *array) {
+type *new_array(const type *array) {
     type *t = malloc(sizeof(type));
     t->type = MODIFIER;
     t->data.modified.type = ARRAY;
@@ -56,7 +56,7 @@ type *new_array(type *array) {
     return t;
 }
 
-bool equal(type *t1, type *t2) {
+bool equal(const type *t1, const type *t2) {
     if(t1->type != t2->type) return false;
     switch(t1->type) {
     case MODIFIER:
@@ -74,7 +74,7 @@ bool equal(type *t1, type *t2) {
     return false;
 }
 
-type *type_merge(type *t1, type *t2) {
+const type *type_merge(const type *t1, const type *t2) {
 	if(t1->type != t2->type && t2->type != C_BINDING) {
 		if(t1->type == C_BINDING) {
 			return type_merge(t2, t1);
