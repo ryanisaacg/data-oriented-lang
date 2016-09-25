@@ -70,3 +70,38 @@ bool equal(type *t1, type *t2) {
     }
     return false;
 }
+
+type *type_merge(type *t1, type *t2) {
+	if(t1->type != t2->type && t2->type != C_BINDING) {
+		if(t1->type == C_BINDING) {
+			return type_merge(t2, t1);
+		} else {
+			return NULL;
+		}
+	} else {
+		switch(t1->type) {
+		case C_BINDING:
+			return t1;
+		case DECLARATION:
+		case MODIFIER:
+			if(equal(t1, t2))
+				return t1;
+			else
+				return NULL;
+		case NUMBER:
+			if(equal(t1, t2))
+				return t1;
+			else {
+				primitive pt1 = t1->data.number;
+				primitive pt2 = t2->data.number;
+				int bytes = max(pt1.bytes, pt2.bytes);
+				numeric_type num = max(pt1.type, pt2.type);
+				type *t = malloc(sizeof(type));
+				t->type = NUMBER;
+				t->data = (type_data){(primitive){num, bytes}};
+				return t;
+			}
+		}
+	}
+	return NULL;
+}

@@ -37,4 +37,5 @@ type *new_float(int bytes);
 type *new_byte();
 type *new_pointer(type *wrapped);
 type *new_array(type *array);
+type *type_merge(type *t1, type *t2);
 bool equal(type *t1, type *t2);
