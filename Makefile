@@ -1,5 +1,5 @@
 C_FLAGS=-Wall -Werror -Wextra -Wfatal-errors -pedantic -std=c99 -Wno-unused-function -Ibuild -g
-L_FLAGS=
+L_FLAGS=-lm
 all: build/parser.out
 
 run: build/output.out
@@ -13,7 +13,7 @@ build/output.out: build/parser.out current.acc
 	build/./parser.out
 
 build/parser.out: build build/yacc.o build/lex.o build/node.o build/printing.o build/table.o build/analyzer.o build/type.o build/output.o build/main.o build/errors.o
-	gcc build/*.o -o build/parser.out
+	gcc build/*.o $(L_FLAGS) -o build/parser.out
 
 build/analyzer.o: analyzer.h analyzer.c build/table.o build/node.o build/type.o
 	gcc $(C_FLAGS) analyzer.c -c -o build/analyzer.o
