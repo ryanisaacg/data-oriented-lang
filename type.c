@@ -1,4 +1,5 @@
 #include "type.h"
+#include <math.h>
 #include "node.h"
 #include <stdlib.h>
 
@@ -94,11 +95,11 @@ type *type_merge(type *t1, type *t2) {
 			else {
 				primitive pt1 = t1->data.number;
 				primitive pt2 = t2->data.number;
-				int bytes = max(pt1.bytes, pt2.bytes);
-				numeric_type num = max(pt1.type, pt2.type);
+				int bytes = pt1.bytes > pt2.bytes ? pt1.bytes : pt2.bytes;
+				numeric_type num = pt1.type > pt2.type ? pt1.type : pt2.type;
 				type *t = malloc(sizeof(type));
 				t->type = NUMBER;
-				t->data = (type_data){(primitive){num, bytes}};
+				t->data.number = (primitive){num, bytes};
 				return t;
 			}
 		}
