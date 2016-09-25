@@ -42,6 +42,7 @@ struct node {
 	origin origin;
 };
 
+node *new_type_node(type *semantic_type);
 node *new_node(node_type type, origin o);
 node *new_ternary_node(node_type type, node *one, node *two, node *three, origin o);
 node *new_binary_node(node_type type, node *left, node *right, origin o);
