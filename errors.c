@@ -22,6 +22,8 @@ static char* type_to_string(error_type type) {
 		return "Not such member in type";
 	case ERROR_TYPE_NOT_FOUND:
 		return "Type does not exist";
+	case ERROR_REDECLARATION:
+		return "Illegal redeclaration";
 	}
 	return "Unknown error type";
 }
