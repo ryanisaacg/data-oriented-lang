@@ -31,6 +31,7 @@
 "cimport" { return CIMPORT_TOKEN; }
 "clink" { return CLINK_TOKEN; }
 "new" { return NEW_TOKEN; }
+"::" { return NS_TOKEN; }
 
 [A-Za-z_]+[A-Za-z0-9_]* {
 	char *text = strdup(yytext);

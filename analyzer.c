@@ -31,6 +31,7 @@ c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 	for(int i = 0; i < main_list.length; i++) {
 		add_to_list(main_items, main_list.data + i);
 	}
+	table_insert(values, "printf", new_type_node(c_binding())); //Insert printf into the symbol table
 	//Run type checking
 	for(int i = 0; i < struct_list.length; i++)
 		type_pass(struct_list.data + i, types, primitives, values);
@@ -428,28 +429,30 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		current->semantic_type = new_array(new_byte());
 	} break;
 	case NAME: {
-		const node *type_source = table_get(values, current->data.string);
+		const table_entry *type_source = table_get(values, current->data.string);
 		if(type_source == NULL)
 			type_source = table_get(types, current->data.string);
 		if(type_source != NULL)
-			current->semantic_type = type_source->semantic_type;
+			current->semantic_type = type_source->declaration->semantic_type;
+		else
+			throw_error((error){ ERROR_NAME_NOT_FOUND, current->origin, current->data.string});
 	} break;
 	case NUM: {
 		//TODO: THIS IS DEFINITELY NOT A GOOD ASSUMTPION
 		current->semantic_type = new_int(4);
 	} break;
 	case TYPE: {
-		const node *n = table_get(types, current->data.string);
+		const table_entry *n = table_get(types, current->data.string);
 		//The type is not found in the symbol table
 		if(n == NULL) {
 			n = table_get(primitives, current->data.string);
 			if(n == NULL)
 				throw_error((error){ERROR_TYPE_NOT_FOUND, current->origin, current->data.string});
 			else
-				current->semantic_type = n->semantic_type;
+				current->semantic_type = n->declaration->semantic_type;
 		}
 		else
-			current->semantic_type = new_declared(n);
+			current->semantic_type = new_declared(n->declaration);
 	} break;
 	case IF: {
 		type_pass(current->data.ternary[0], types, primitives, values);
@@ -479,7 +482,7 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 	} break;
 	case FUNC_CALL: {
 		char *name = current->data.binary[0]->data.string;
-		current->semantic_type = new_declared(table_get(values, name));
+		current->semantic_type = new_declared(table_get(values, name)->declaration);
 		listnode list = current->data.binary[1]->data.list;
 		//create a new symbol table for the duration of the block
 		values = new_table(values);
@@ -516,13 +519,13 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 			type_pass(&(current->data.list.data[i]), types, primitives, values);
 	} break;
 	case STRUCT_DELARATION: {
+		table_insert(types, current->data.binary[0]->data.string, current);
 		type_pass(current->data.binary[0], types, primitives, values);
 		listnode list = current->data.binary[1]->data.list;
 		for(int i = 0; i < list.length; i++) {
 			node pair_node = list.data[i];
 			type_pass(pair_node.data.binary[0], types, primitives, values);
 		}
-		table_insert(types, current->data.binary[0]->data.string, current);
 	} break;
 	case FUNCTION_DECLARATION: {
 		type_pass(current->data.func.return_type, types, primitives, values);

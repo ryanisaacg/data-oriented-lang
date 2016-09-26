@@ -32,11 +32,14 @@ void table_insert(table *tbl, const char *name, const node *declaration) {
 	}
 }
 
-const node *table_get(const table *tbl, const char *name) {
+void table_add(table *tbl, const char *name, const node *declaration);
+
+
+const table_entry *table_get(const table *tbl, const char *name) {
 	for(int i = 0; i < tbl->length; i++) {
 		table_entry entry = tbl->entries[i];
 		if(strcmp(entry.name, name) == 0) {
-			return entry.declaration;
+			return tbl->entries + i;
 		}
 	}
 	if(tbl->parent != NULL) {

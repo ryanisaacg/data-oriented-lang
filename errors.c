@@ -24,6 +24,8 @@ static char* type_to_string(error_type type) {
 		return "Type does not exist";
 	case ERROR_REDECLARATION:
 		return "Illegal redeclaration";
+	case ERROR_NAME_NOT_FOUND:
+		return "Name not found";
 	}
 	return "Unknown error type";
 }

@@ -34,6 +34,7 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Global variable support?
 * [ ] Imports for other clarke files
     * [ ] Namespace name mangling
+		* [x] Store what function a call points to
 		* [ ] Name mangling
 		* [x] Type checking
 			* [x] Error reporting
@@ -65,3 +66,4 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Commented code / parser
 * [ ] ARC for non-C pointers
 * [ ] defer for RAII
+* [ ] Nested namespaces?

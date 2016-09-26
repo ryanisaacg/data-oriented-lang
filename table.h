@@ -11,6 +11,7 @@ typedef struct table_entry table_entry;
 struct table_entry {
 	const char *name;
 	const node *declaration;
+	int length;
 };
 
 struct table {
@@ -22,5 +23,6 @@ struct table {
 table *new_root_table();
 table *new_table(const table *parent);
 void table_insert(table *tbl, const char *name, const node *declaration);
-const node *table_get(const table *tbl, const char *name);
+void table_add(table *tbl, const char *name, const node *declaration);
+const table_entry *table_get(const table *tbl, const char *name);
 void table_destroy(table *tbl);

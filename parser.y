@@ -49,6 +49,8 @@
 %token CIMPORT_TOKEN
 %token CLINK_TOKEN
 %token NEW_TOKEN
+%token NS_TOKEN
+
 %left EQ_TOKEN NEQ_TOKEN GEQ_TOKEN LEQ_TOKEN '<' '>'
 %left '='
 %left '+' '-' '%'
@@ -58,6 +60,7 @@
 %nonassoc '$' '@'
 %left '.'
 %nonassoc NEW_TOKEN
+%left NS_TOKEN
 
 %parse-param {node *root_node}
 %parse-param {char *filename}
@@ -98,6 +101,7 @@ expression:
 	| string
 	| '(' expression ')' {
 		$<nval>$ = $<nval>2; }
+	| name NS_TOKEN expression { $<nval>$ = $<nval>3; $<nval>$->ns = $<nval>1; }
 	| expression '+' expression { $<nval>$ = new_binary_node(OP_ADD, $<nval>1, $<nval>3, (origin){filename, yylineno}); }
 	| expression '-' expression { $<nval>$ = new_binary_node(OP_SUB, $<nval>1, $<nval>3, (origin){filename, yylineno}); }
 	| expression '*' expression { $<nval>$ = new_binary_node(OP_MULT, $<nval>1, $<nval>3, (origin){filename, yylineno}); }
