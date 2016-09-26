@@ -503,10 +503,10 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		for(int i = 0; i < len; i++) {
 			node *declared = &(right->data.list.data[i]);
 			declared->semantic_type = left->semantic_type;
-			if(declared->type == OP_ASSIGN)
-				table_insert(values, declared->data.binary[0]->data.string, left);
-			else
-				table_insert(values, declared->data.string, left);
+			char *name = declared->type == OP_ASSIGN ? declared->data.binary[0]->data.string : declared->data.string;
+			if(table_get(values, name) != NULL)
+				throw_error((error){ERROR_REDECLARATION, current->origin, name});
+			table_insert(values, name, left);
 			type_pass(declared, types, primitives, values);
 		}
 	} break;
