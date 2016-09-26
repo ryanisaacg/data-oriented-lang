@@ -42,8 +42,8 @@ This language is designed around arrays and data contiguity, which is very impor
 			* [x] Error module
 			* [x] Type checking
 			* [x] Prevent variable shadowing
-    * [ ] Namespace operator
-        * [ ] Special C namespace that allows any symbol
+		* [ ] Namespace operator
+			* [ ] Special C namespace that allows any symbol
     * [ ] Clarke standard library
     * [ ] Clarke search / link path
     * [ ] Incremental compilation
