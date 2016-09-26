@@ -63,3 +63,5 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Coroutines
 * [ ] Multiple return values
 * [ ] Commented code / parser
+* [ ] ARC for non-C pointers
+* [ ] defer for RAII
