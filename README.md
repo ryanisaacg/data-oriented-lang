@@ -35,15 +35,13 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Imports for other clarke files
     * [ ] Namespace name mangling
 		* [ ] Name mangling
-		* [ ] Type checking
+		* [x] Type checking
 			* [x] Error reporting
 			* [x] Improved error messages
 			* [x] Add line number to nodes
 			* [x] Error module
 			* [x] Type checking
 			* [x] Prevent variable shadowing
-            * [ ] Proper boolean type
-            * [ ] Proper string type
     * [ ] Namespace operator
         * [ ] Special C namespace that allows any symbol
     * [ ] Clarke standard library
