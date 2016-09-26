@@ -44,8 +44,8 @@ int main(void) {
 	strcat(resulting_command, cflags);
 	printf("%s\n", resulting_command);
 	FILE *out = popen(resulting_command, "w");
-	c_write(out, result);
-	c_write(stdout, result);
+	c_write(out, &result);
+	c_write(stdout, &result);
 	pclose(out);
 	return 0;
 }

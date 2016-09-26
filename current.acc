@@ -1,4 +1,5 @@
 cimport math
+cextern printf
 
 type Point struct
     int x
@@ -9,6 +10,10 @@ func print(int number) void
     printf("%d\n", number)
 end
 
+func plusone(int a) int
+	return add(a, 1)
+end
+
 func add(int a, int b) int
     return a + b
 end
@@ -16,6 +21,7 @@ end
 func incr(@int a) void
 	$a = $a + 1
 end
+
 
 @Point q = new Point{1, 6}, p = new Point{0, 2}, x
 print(q.x)

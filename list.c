@@ -8,7 +8,7 @@ list list_new(size_t capacity, size_t size) {
 	return (list){malloc(capacity * size), 0, capacity, size};
 }
 
-void list_add(list *l, void *item) {
+void list_add(list *l, const void *item) {
 	if(l->length < l->capacity / 2) {
 		memcpy(l->buffer + l->length * l->size, item, l->size);
 		l->length++;

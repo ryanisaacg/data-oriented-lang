@@ -5,6 +5,8 @@
 
 struct node;
 typedef struct node node;
+struct namespace;
+typedef struct namespace namespace;
 
 typedef enum node_type { OP_ADD, OP_SUB, OP_NEGATIVE, OP_MULT, OP_DIV, OP_MOD, OP_EXP,
 	OP_BIT_AND,	OP_BOOL_AND, OP_BIT_OR, OP_BOOL_OR, OP_BIT_XOR, OP_BOOL_XOR, OP_BIT_NOT, OP_BOOL_NOT,
@@ -38,10 +40,12 @@ struct node {
 		int integer;
 	} data;
 	node_type type;
-	type *semantic_type;
+	const type *semantic_type;
 	origin origin;
+	node *ns;
 };
 
+node *new_type_node(type *semantic_type);
 node *new_node(node_type type, origin o);
 node *new_ternary_node(node_type type, node *one, node *two, node *three, origin o);
 node *new_binary_node(node_type type, node *left, node *right, origin o);

@@ -34,16 +34,17 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Global variable support?
 * [ ] Imports for other clarke files
     * [ ] Namespace name mangling
+		* [x] Store what function a call points to
 		* [ ] Name mangling
-		* [ ] Type checking
-			* [ ] Error reporting
-			* [ ] Improved error messages
+		* [x] Type checking
+			* [x] Error reporting
+			* [x] Improved error messages
 			* [x] Add line number to nodes
 			* [x] Error module
-			* [ ] Type checking
-			* [ ] Prevent variable shadowing
-    * [ ] Namespace operator
-        * [ ] Special C namespace that allows any symbol
+			* [x] Type checking
+			* [x] Prevent variable shadowing
+		* [ ] Namespace operator
+			* [ ] Special C namespace that allows any symbol
     * [ ] Clarke standard library
     * [ ] Clarke search / link path
     * [ ] Incremental compilation
@@ -62,3 +63,7 @@ This language is designed around arrays and data contiguity, which is very impor
 		* [ ] -I equivalent
 * [ ] Coroutines
 * [ ] Multiple return values
+* [ ] Commented code / parser
+* [ ] ARC for non-C pointers
+* [ ] defer for RAII
+* [ ] Nested namespaces?

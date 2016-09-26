@@ -2,6 +2,12 @@
 
 #include <stdlib.h>
 
+node *new_type_node(type *semantic_type) {
+	node *n = new_node(0, (origin){"", 0});
+	n->semantic_type = semantic_type;
+	return n;
+}
+
 node *new_node(node_type type, origin o) {
 	node *new = malloc(sizeof(node));
 	new->type = type;

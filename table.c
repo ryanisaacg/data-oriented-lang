@@ -12,22 +12,22 @@ table *new_root_table() {
 	return tbl;
 }
 
-table *new_table(table *parent) {
+table *new_table(const table *parent) {
 	table *tbl = new_root_table();
 	tbl->parent = parent;
 	return tbl;
 }
 
-void table_insert(table *tbl, char *name, node *declaration) {
-	table_entry entry = {name, declaration};
+void table_insert(table *tbl, const char *name, const node *declaration) {
+	table_entry entry = {name, declaration, 1};
 	list_add(&(tbl->entries), &entry);
 }
 
-node *table_get(table *tbl, char *name) {
+const table_entry *table_get(const table *tbl, const char *name) {
 	for(unsigned int i = 0; i < tbl->entries.length; i++) {
 		table_entry *entry = list_get(tbl->entries, i);
 		if(strcmp(entry->name, name) == 0) {
-			return entry->declaration;
+			return (table_entry*)(tbl->entries.buffer) + i;
 		}
 	}
 	if(tbl->parent != NULL) {
@@ -36,6 +36,10 @@ node *table_get(table *tbl, char *name) {
 		return NULL;
 	}
 }
+
+
+void table_add(table *tbl, const char *name, const node *declaration);
+
 
 void table_destroy(table *tbl) {
 	list_destroy(tbl->entries);

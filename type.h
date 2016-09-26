@@ -7,7 +7,7 @@ struct node;
 struct type;
 typedef struct type type;
 
-typedef enum {FLOAT, INT_TYPE, BYTE} numeric_type;
+typedef enum {BYTE, INT_TYPE, FLOAT} numeric_type; //In ascending order of precedence
 
 typedef struct {
 	numeric_type type;
@@ -16,25 +16,27 @@ typedef struct {
 
 typedef struct {
 	enum {POINTER, ARRAY} type;
-	type *modified;
+	const type *modified;
 } type_modifier;
 
 typedef union {
-	struct node *declared;
+	const struct node *declared;
 	type_modifier modified;
 	primitive number;
 } type_data;
 
 struct type {
-	enum {DECLARATION, MODIFIER, NUMBER, C_BINDING} type;
+	enum {DECLARATION, MODIFIER, NUMBER, C_BINDING, VOID} type;
 	type_data data;
 };
 
 type *c_binding();
-type *new_declared(struct node *declared);
+type *new_declared(const struct node *declared);
 type *new_int(int bytes);
 type *new_float(int bytes);
 type *new_byte();
-type *new_pointer(type *wrapped);
-type *new_array(type *array);
-bool equal(type *t1, type *t2);
+type *new_pointer(const type *wrapped);
+type *new_array(const type *array);
+const type *type_merge(const type *t1, const type *t2);
+type *new_void();
+bool equal(const type *t1, const type *t2);
