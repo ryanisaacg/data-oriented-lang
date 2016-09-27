@@ -20,7 +20,7 @@ void list_add(list *l, const void *item) {
 }
 
 void list_set(list l, const void *item, int index) {
-	memcpy(l->buffer + index * l->size, item, l->size);
+	memcpy(l.buffer + index * l.size, item, l.size);
 }
 
 void *list_get(list l, size_t index) {
