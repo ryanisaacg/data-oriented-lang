@@ -437,7 +437,7 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		if(type_source == NULL)
 			type_source = table_get(types, current->data.string);
 		if(type_source != NULL)
-			current->semantic_type = type_source->declaration->semantic_type;
+			current->semantic_type = ((node*)list_get(type_source->entries, 0))->semantic_type;
 		else
 			throw_error((error){ ERROR_NAME_NOT_FOUND, current->origin, current->data.string});
 	} break;
@@ -446,17 +446,17 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		current->semantic_type = new_int(4);
 	} break;
 	case TYPE: {
-		const table_entry *n = table_get(types, current->data.string);
+		const table_entry *n =  table_get(types, current->data.string);
 		//The type is not found in the symbol table
 		if(n == NULL) {
 			n = table_get(primitives, current->data.string);
 			if(n == NULL)
 				throw_error((error){ERROR_TYPE_NOT_FOUND, current->origin, current->data.string});
 			else
-				current->semantic_type = n->declaration->semantic_type;
+				current->semantic_type = new_declared(((node*)list_get(n->entries, 0)));
 		}
 		else
-			current->semantic_type = new_declared(n->declaration);
+			current->semantic_type = new_declared(((node*)list_get(n->entries, 0)));
 	} break;
 	case IF: {
 		type_pass(current->data.ternary[0], types, primitives, values);
@@ -486,11 +486,30 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 	} break;
 	case FUNC_CALL: {
 		char *name = current->data.binary[0]->data.string;
-		current->semantic_type = new_declared(table_get(values, name)->declaration);
-		listnode list = current->data.binary[1]->data.list;
-		//create a new symbol table for the duration of the block
-		for(int i = 0; i < list.length; i++)
-			type_pass(&(list.data[i]), types, primitives, values);
+		listnode l = current->data.binary[1]->data.list;
+		for(int i = 0; i < l.length; i++)
+			type_pass(&(l.data[i]), types, primitives, values);
+		const table_entry *entry = table_get(values, name);
+		if(entry == NULL)
+			throw_error((error){ ERROR_NAME_NOT_FOUND, current->origin, current->data.string});
+		const list entries = entry->entries;
+		const node *overload = NULL;
+		for(unsigned int i = 0; i < entries.length && overload == NULL; i++) {
+			const node *declared = list_get(entries, i);
+			const listnode params = declared->data.func.params->data.list;
+			if(params.length != l.length) continue;
+			overload = declared;
+			for(int j = 0; j < params.length; j++) {
+				node actual = l.data[j];
+				node formal = params.data[j];
+				if(!equal(formal.semantic_type, type_merge(actual.semantic_type, formal.semantic_type))) {
+					overload = NULL;
+					break;
+				}
+			}
+		}
+		//TODO: Throw error if no overload found
+		current->semantic_type = new_declared(overload);
 	} break;
 	case OP_ASSIGN: {
 		node *left = current->data.binary[0], *right = current->data.binary[1];

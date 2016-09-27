@@ -23,5 +23,5 @@ table *new_root_table();
 table *new_table(const table *parent);
 void table_insert(table *tbl, const char *name, const node *declaration);
 void table_add(table *tbl, const char *name, const node *declaration);
-const table_entry *table_get(const table *tbl, const char *name);
+table_entry *table_get(const table *tbl, const char *name);
 void table_destroy(table *tbl);

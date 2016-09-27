@@ -20,11 +20,11 @@ table *new_table(const table *parent) {
 
 void table_insert(table *tbl, const char *name, const node *declaration) {
 	table_entry entry = {name, list_new(10, sizeof(node*))};
-	list_add(&(entry->entries), declaration);
+	list_add(&(entry.entries), declaration);
 	list_add(&(tbl->entries), &entry);
 }
 
-const table_entry *table_get(const table *tbl, const char *name) {
+table_entry *table_get(const table *tbl, const char *name) {
 	for(unsigned int i = 0; i < tbl->entries.length; i++) {
 		table_entry *entry = list_get(tbl->entries, i);
 		if(strcmp(entry->name, name) == 0) {
@@ -40,7 +40,7 @@ const table_entry *table_get(const table *tbl, const char *name) {
 
 
 void table_add(table *tbl, const char *name, const node *declaration) {
-	const table_entry *entry = table_get(tbl, name);
+	table_entry *entry = table_get(tbl, name);
 	if(entry == NULL) {
 		table_insert(tbl, name, declaration);
 	} else {
