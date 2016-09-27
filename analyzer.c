@@ -489,10 +489,8 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		current->semantic_type = new_declared(table_get(values, name)->declaration);
 		listnode list = current->data.binary[1]->data.list;
 		//create a new symbol table for the duration of the block
-		values = new_table(values);
 		for(int i = 0; i < list.length; i++)
 			type_pass(&(list.data[i]), types, primitives, values);
-		table_destroy(values);
 	} break;
 	case OP_ASSIGN: {
 		node *left = current->data.binary[0], *right = current->data.binary[1];
