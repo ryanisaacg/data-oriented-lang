@@ -11,8 +11,7 @@ typedef struct table_entry table_entry;
 
 struct table_entry {
 	const char *name;
-	const node *declaration;
-	int length;
+	list entries;
 };
 
 struct table {

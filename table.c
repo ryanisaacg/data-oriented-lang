@@ -19,7 +19,8 @@ table *new_table(const table *parent) {
 }
 
 void table_insert(table *tbl, const char *name, const node *declaration) {
-	table_entry entry = {name, declaration, 1};
+	table_entry entry = {name, list_new(10, sizeof(node*))};
+	list_add(&(entry->entries), declaration);
 	list_add(&(tbl->entries), &entry);
 }
 
@@ -38,7 +39,14 @@ const table_entry *table_get(const table *tbl, const char *name) {
 }
 
 
-void table_add(table *tbl, const char *name, const node *declaration);
+void table_add(table *tbl, const char *name, const node *declaration) {
+	const table_entry *entry = table_get(tbl, name);
+	if(entry == NULL) {
+		table_insert(tbl, name, declaration);
+	} else {
+		list_add(&(entry->entries), declaration);
+	}
+}
 
 
 void table_destroy(table *tbl) {
