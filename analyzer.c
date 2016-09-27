@@ -437,7 +437,7 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		if(type_source == NULL)
 			type_source = table_get(types, current->data.string);
 		if(type_source != NULL)
-			current->semantic_type = ((node*)list_get(type_source->entries, 0))->semantic_type;
+			current->semantic_type = (*(node**)list_get(type_source->entries, 0))->semantic_type;
 		else
 			throw_error((error){ ERROR_NAME_NOT_FOUND, current->origin, current->data.string});
 	} break;
@@ -495,7 +495,9 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 		const list entries = entry->entries;
 		const node *overload = NULL;
 		for(unsigned int i = 0; i < entries.length && overload == NULL; i++) {
-			const node *declared = list_get(entries, i);
+			const node *declared = *(node**)list_get(entries, i);
+			const type *t = declared->semantic_type;
+			if(t != NULL && t->type == C_BINDING) break;
 			const listnode params = declared->data.func.params->data.list;
 			if(params.length != l.length) continue;
 			overload = declared;
@@ -562,6 +564,7 @@ static void type_pass(node *current, table *types, const table *primitives, tabl
 			type_pass(right, types, primitives, values);
 		}
 		type_pass(current->data.func.body, types, primitives, values);
+		table_add(values, current->data.func.name->data.string, current);
 	} break;
 	case RETURN:
 		type_pass(current->data.unary, types, primitives, values);
