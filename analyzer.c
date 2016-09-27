@@ -15,6 +15,7 @@ static c_ast_node analyze_block(node *list);
 static void add_flag(char **cflags, int *cflag_capacity, char *new_flag);
 static void type_pass(node *current, table *types, const table *primitives, table *values);
 static c_ast_node analyze_externs(listnode external_list, char **cflags, int *cflag_capacity, table *values);
+static c_ast_node mangle(listnode func_list);
 
 c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 	table *types = new_root_table();
@@ -43,12 +44,14 @@ c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 		type_pass(func_list.data + i, types, primitives, values);
 	type_pass(main_items, types, primitives, values);
 	//Create C ouptut
-	c_ast_node c_root = new_c_node( "extern void printf(); extern void *memcpy(); extern void *malloc();", func_list.length + 6);
+	c_ast_node c_root = new_c_node( "extern void printf(); extern void *memcpy(); extern void *malloc();", func_list.length + 7);
 	c_ast_node forward_decs = new_c_node("", struct_list.length);
 	c_ast_node struct_declarations = new_c_node("", struct_list.length);
 	add_c_child(&c_root, analyze_externs(root.ext_list->data.list, cflags, cflag_capacity, values));
 	table_destroy(types);
 	table_destroy(values);
+	//Forward declaration and name mangling
+	add_c_child(&c_root, mangle(func_list));
 	for(int i = 0; i < struct_list.length; i++) {
 		node *name = struct_list.data[i].data.binary[0];
 		table_insert(types, name->data.string, struct_list.data + i);
@@ -196,7 +199,8 @@ static c_ast_node analyze_node(node *current) {
 		return control;
 	}
 	case FUNC_CALL: {
-		char *name = current->data.binary[0]->data.string;
+		const type *t = current->semantic_type;
+		char *name = t->data.declared->data.binary[0]->data.string; //current->data.binary[0]->data.string;
 		listnode list = current->data.binary[1]->data.list;
 		c_ast_node call = new_c_node(name, 2 + list.length * 2 - 1);
 		add_c_child(&call, new_c_node("(", 0));
@@ -620,4 +624,42 @@ static c_ast_node analyze_externs(listnode external_list, char **cflags, int *cf
 		}
 	}
 	return externs;
+}
+
+static c_ast_node mangle(listnode func_list) {
+	list names = list_new(10, sizeof(char*)), amount = list_new(10, sizeof(int));
+	c_ast_node all_mangled = new_c_node("", func_list.length);
+	for(int i = 0; i < func_list.length; i++) {
+		funcnode func = func_list.data[i].data.func;
+		c_ast_node function = new_c_node("", 3);
+		char number[10];
+		number[0] = '\0';
+		int index = -1;
+		char *name = func.name->data.string;
+		for(unsigned int j = 0; j < names.length; j++) {
+			char *current = list_get(names, j);
+			if(strcmp(name, current) == 0)
+				index = i;
+		}
+		if(index == -1) {
+			list_add(&names, name);
+			int n = 0;
+			list_add(&amount, &n);
+			sprintf(number, "%d", 0);
+		} else {
+			int *n = list_get(names, index);
+			*n += 1;
+			sprintf(number, "%d", *n);
+		}
+		char *mangled = malloc(strlen(name) + strlen(number) + 1);
+		mangled[0] = '\0';
+		strcat(mangled, name);
+		strcat(mangled, number);
+		func.name->data.string = mangled;
+		add_c_child(&function, analyze_node(func.return_type));
+		add_c_child(&function, new_c_node(mangled, 0));
+		add_c_child(&function, new_c_node("();", 0));
+		add_c_child(&all_mangled, function);
+	}
+	return all_mangled;
 }
