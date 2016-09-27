@@ -35,7 +35,8 @@ This language is designed around arrays and data contiguity, which is very impor
 * [ ] Imports for other clarke files
     * [ ] Namespace name mangling
 		* [x] Store what function a call points to
-		* [ ] Name mangling
+		* [x] Name mangling
+		* [ ] Function overloading
 		* [x] Type checking
 			* [x] Error reporting
 			* [x] Improved error messages
