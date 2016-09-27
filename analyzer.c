@@ -42,13 +42,13 @@ c_ast_node analyze(rootnode root, char **cflags, int *cflag_capacity) {
 	for(int i = 0; i < func_list.length; i++)
 		type_pass(func_list.data + i, types, primitives, values);
 	type_pass(main_items, types, primitives, values);
-	table_destroy(types);
-	table_destroy(values);
 	//Create C ouptut
 	c_ast_node c_root = new_c_node( "extern void printf(); extern void *memcpy(); extern void *malloc();", func_list.length + 6);
 	c_ast_node forward_decs = new_c_node("", struct_list.length);
 	c_ast_node struct_declarations = new_c_node("", struct_list.length);
 	add_c_child(&c_root, analyze_externs(root.ext_list->data.list, cflags, cflag_capacity, values));
+	table_destroy(types);
+	table_destroy(values);
 	for(int i = 0; i < struct_list.length; i++) {
 		node *name = struct_list.data[i].data.binary[0];
 		table_insert(types, name->data.string, struct_list.data + i);
